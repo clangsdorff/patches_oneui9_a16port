@@ -1,0 +1,72 @@
+getprop("ro.product.device") == "a14" || abort("E3004: This package is for \"a14\" devices; this is a \"" + getprop("ro.product.device") + "\".");
+ui_print(" ");
+ui_print ("                     _    _ _  _                    ");
+ui_print ("                    / \  / | || |                   ");
+ui_print ("                   / _ \ | | || |_                  ");
+ui_print ("                  / ___ \| |__   _|                 ");
+ui_print ("                 /_/   \_\_|  |_|                   ");
+ui_print ("        ____  _______     _______     _______        ");
+ui_print ("       |  _ \| ____\ \   / /_ _\ \   / / ____|       ");
+ui_print ("       | |_) |  _|  \ \ / / | | \ \ / /|  _|         ");
+ui_print ("       |  _ <| |___  \ V /  | |  \ V / | |___        ");
+ui_print ("       |_| \_\_____|  \_/  |___|  \_/  |_____|       ");
+ui_print (" ");
+ui_print (" ");
+ui_print (" -- Version 5.0");
+ui_print (" -- OneUI 9 A166BXXUAEZJ5 Base with langsdorffkernel@4.0en");
+ui_print (" ");
+ui_print (" -- first boot may take several minutes");
+ui_print (" ");
+
+
+# --- Start patching dynamic partitions ---
+
+# Update dynamic partition metadata
+
+assert(update_dynamic_partitions(package_extract_file("dynamic_partitions_op_list"), package_extract_file("unsparse_super_empty.img")));
+
+ui_print("Patching system image unconditionally...");
+show_progress(0.400000, 0);
+block_image_update(map_partition("system"), package_extract_file("system.transfer.list"), "system.new.dat", "system.patch.dat") ||
+  abort("E1001: Failed to update system image.");
+
+ui_print("Patching vendor image unconditionally...");
+show_progress(0.100000, 0);
+block_image_update(map_partition("vendor"), package_extract_file("vendor.transfer.list"), "vendor.new.dat", "vendor.patch.dat") ||
+  abort("E2001: Failed to update vendor image.");
+
+ui_print("Patching product image unconditionally...");
+show_progress(0.100000, 0);
+block_image_update(map_partition("product"), package_extract_file("product.transfer.list"), "product.new.dat", "product.patch.dat") ||
+  abort("E2001: Failed to update product image.");
+
+ui_print("Patching odm image unconditionally...");
+show_progress(0.100000, 0);
+block_image_update(map_partition("odm"), package_extract_file("odm.transfer.list"), "odm.new.dat", "odm.patch.dat") ||
+  abort("E2001: Failed to update odm image.");
+
+ui_print("Patching vendor_dlkm image unconditionally...");
+show_progress(0.100000, 0);
+block_image_update(map_partition("vendor_dlkm"), package_extract_file("vendor_dlkm.transfer.list"), "vendor_dlkm.new.dat", "vendor_dlkm.patch.dat") ||
+  abort("E2001: Failed to update vendor_dlkm image.");
+
+ui_print("Patching system_dlkm image unconditionally...");
+show_progress(0.100000, 0);
+block_image_update(map_partition("system_dlkm"), package_extract_file("system_dlkm.transfer.list"), "system_dlkm.new.dat", "system_dlkm.patch.dat") ||
+  abort("E2001: Failed to update system_dlkm image.");
+
+ui_print("Installing optics & prism image...");
+package_extract_file("prism.img", "/dev/block/bootdevice/by-name/prism");
+package_extract_file("optics.img", "/dev/block/bootdevice/by-name/optics");
+
+ui_print("Installing kernel...");
+package_extract_file("vendor_boot.img", "/dev/block/bootdevice/by-name/vendor_boot");
+package_extract_file("boot.img", "/dev/block/bootdevice/by-name/boot");
+package_extract_file("vbmeta.img", "/dev/block/bootdevice/by-name/vbmeta");
+set_progress(1.000000);
+
+ui_print("Installing up_param image...");
+package_extract_file("up_param.bin", "/dev/block/bootdevice/by-name/up_param");
+set_progress(1.000000);
+ui_print("************************************************");
+ui_print(" ");

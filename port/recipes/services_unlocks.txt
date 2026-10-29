@@ -1,0 +1,13 @@
+# Always allow app downgrades (UN1CA allow_downgrade, toggle removed)
+null	com/android/server/pm/PackageManagerServiceUtils	checkDowngrade(JI[Ljava/lang/String;[ILandroid/content/pm/PackageInfoLite;)V
+
+# No minimum target SDK for installs (UN1CA allow_sdkbypass, toggle removed)
+replace	com/android/server/pm/PackageManagerService	<clinit>()V	    const/16 v1, 0x18\n\n    sput v1, Lcom/android/server/pm/PackageManagerService;->MIN_INSTALLABLE_TARGET_SDK:I	    const/4 v1, 0x0\n\n    sput v1, Lcom/android/server/pm/PackageManagerService;->MIN_INSTALLABLE_TARGET_SDK:I
+
+# Apps are never told about screenshots or screen recording (UN1CA ss_detection, toggle removed)
+body	com/android/server/wm/WindowManagerService	notifyScreenshotListeners(I)Ljava/util/List;	services/notifyScreenshotListeners.smali
+replace	com/android/server/wm/WindowManagerService	registerScreenRecordingCallback(Landroid/window/IScreenRecordingCallback;)Z	    invoke-virtual {p0}, Landroid/view/IWindowManager$Stub;->registerScreenRecordingCallback_enforcePermission()V\n	    invoke-virtual {p0}, Landroid/view/IWindowManager$Stub;->registerScreenRecordingCallback_enforcePermission()V\n\n    const/4 p0, 0x0\n\n    return p0\n
+replace	com/android/server/wm/ScreenRecordingCallbackController	dispatchCallbacks(Landroid/util/ArraySet;Z)V	    .locals 5\n	    .locals 5\n\n    const/4 p2, 0x0\n
+
+# ASKS off (UN1CA asks, toggle removed): it only enforces on official builds
+replaceall	com/android/server/asks/ASKSManagerService	"ro.build.official.release"	"ro.build.official.release.asks"

@@ -1,0 +1,49 @@
+diff --git a/smali/com/samsung/android/knox/EnterpriseDeviceManager.smali b/smali/com/samsung/android/knox/EnterpriseDeviceManager.smali
+index 18ea4a4..c0e1c92 100644
+--- a/smali/com/samsung/android/knox/EnterpriseDeviceManager.smali
++++ b/smali/com/samsung/android/knox/EnterpriseDeviceManager.smali
+@@ -576,29 +576,11 @@
+ .end method
+ 
+ .method public static greylist getAPILevel()I
+-    .locals 2
++    .locals 1
+ 
+-    :try_start_0
+-    invoke-static {}, Lcom/samsung/android/knox/EdmUtils;->getAPILevelForInternal()I
++    invoke-static {}, Lio/mesalabs/unica/KnoxPatchHooks;->onEDMGetAPILevel()I
+ 
+     move-result v0
+-    :try_end_0
+-    .catch Ljava/lang/UnsupportedOperationException; {:try_start_0 .. :try_end_0} :catch_0
+-
+-    return v0
+-
+-    :catch_0
+-    move-exception v0
+-
+-    sget-object v1, Lcom/samsung/android/knox/EnterpriseDeviceManager;->TAG:Ljava/lang/String;
+-
+-    invoke-virtual {v0}, Ljava/lang/UnsupportedOperationException;->getMessage()Ljava/lang/String;
+-
+-    move-result-object v0
+-
+-    invoke-static {v1, v0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    const/4 v0, 0x0
+ 
+     return v0
+ .end method
+diff --git a/smali/com/samsung/android/knox/integrity/EnhancedAttestationPolicy.smali b/smali/com/samsung/android/knox/integrity/EnhancedAttestationPolicy.smali
+index 51891c1..725d3d1 100644
+--- a/smali/com/samsung/android/knox/integrity/EnhancedAttestationPolicy.smali
++++ b/smali/com/samsung/android/knox/integrity/EnhancedAttestationPolicy.smali
+@@ -592,7 +592,7 @@
+ .method public greylist isBldpEventSupported()Z
+     .locals 0
+ 
+-    const/4 p0, 0x1
++    const/4 p0, 0x0
+ 
+     return p0
+ .end method

@@ -1,0 +1,43 @@
+# Battery health model from the A14 stock SohService (from UN1CA stock_blobs)
+rmfile	assets/0/A/Probe_R01.csv
+rmfile	assets/0/A/Slope.csv
+rmfile	assets/0/A/Vsei_Soc_initial.csv
+rmfile	assets/0/A/hiddenBias.csv
+rmfile	assets/0/A/hiddenWeight.csv
+rmfile	assets/0/A/inputBias.csv
+rmfile	assets/0/A/inputWeight.csv
+rmfile	assets/0/D/Probe_R01.csv
+rmfile	assets/0/D/Slope.csv
+rmfile	assets/0/D/Vsei_Soc_initial.csv
+rmfile	assets/0/D/hiddenBias.csv
+rmfile	assets/0/D/hiddenWeight.csv
+rmfile	assets/0/D/inputBias.csv
+rmfile	assets/0/D/inputWeight.csv
+rmfile	assets/0/L/Probe_R01.csv
+rmfile	assets/0/L/Slope.csv
+rmfile	assets/0/L/Vsei_Soc_initial.csv
+rmfile	assets/0/L/hiddenBias.csv
+rmfile	assets/0/L/hiddenWeight.csv
+rmfile	assets/0/L/inputBias.csv
+rmfile	assets/0/L/inputWeight.csv
+rmfile	assets/0/default/Probe_R01.csv
+rmfile	assets/0/default/Slope.csv
+rmfile	assets/0/default/Vsei_Soc_initial.csv
+rmfile	assets/0/default/hiddenBias.csv
+rmfile	assets/0/default/hiddenWeight.csv
+rmfile	assets/0/default/inputBias.csv
+rmfile	assets/0/default/inputWeight.csv
+putfile	../files/SohService/assets/0/A/Probe_R01.csv	assets/0/A/Probe_R01.csv
+putfile	../files/SohService/assets/0/A/Slope.csv	assets/0/A/Slope.csv
+putfile	../files/SohService/assets/0/A/Vsei_Soc_initial.csv	assets/0/A/Vsei_Soc_initial.csv
+putfile	../files/SohService/assets/0/A/hiddenBias.csv	assets/0/A/hiddenBias.csv
+putfile	../files/SohService/assets/0/A/hiddenWeight.csv	assets/0/A/hiddenWeight.csv
+putfile	../files/SohService/assets/0/A/inputBias.csv	assets/0/A/inputBias.csv
+putfile	../files/SohService/assets/0/A/inputWeight.csv	assets/0/A/inputWeight.csv
+putfile	../files/SohService/assets/0/D/Probe_R01.csv	assets/0/D/Probe_R01.csv
+putfile	../files/SohService/assets/0/D/Slope.csv	assets/0/D/Slope.csv
+putfile	../files/SohService/assets/0/D/Vsei_Soc_initial.csv	assets/0/D/Vsei_Soc_initial.csv
+putfile	../files/SohService/assets/0/D/hiddenBias.csv	assets/0/D/hiddenBias.csv
+putfile	../files/SohService/assets/0/D/hiddenWeight.csv	assets/0/D/hiddenWeight.csv
+putfile	../files/SohService/assets/0/D/inputBias.csv	assets/0/D/inputBias.csv
+putfile	../files/SohService/assets/0/D/inputWeight.csv	assets/0/D/inputWeight.csv

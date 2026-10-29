@@ -1,0 +1,7 @@
+public.libraries-camera.samsung.txt libEventDetector.camera.samsung.so
+public.libraries-camera.samsung.txt libFacialBasedSelfieCorrection.camera.samsung.so
+public.libraries-camera.samsung.txt libMultiFrameProcessing10.camera.samsung.so
+public.libraries-camera.samsung.txt libUltraWideDistortionCorrection.camera.samsung.so
+public.libraries-camera.samsung.txt libsmart_cropping.camera.samsung.so
+public.libraries-arcsoft.txt libPortraitDistortionCorrection.arcsoft.so
+public.libraries-arcsoft.txt libPortraitDistortionCorrectionCali.arcsoft.so

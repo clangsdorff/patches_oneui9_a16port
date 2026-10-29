@@ -1,0 +1,19 @@
+# Power off lock outside Brazil
+replace	com/samsung/android/settings/security/PowerOffLockPreferenceController	getAvailabilityStatus()I	    if-nez p0, :cond_0\n\n    goto :goto_0\n	    goto :cond_0\n
+
+# Outdoor mode (from UN1CA outdoor)
+return	com/samsung/android/settings/display/controller/SecOutDoorModePreferenceController	isAvailable()Z	true
+
+# Knox attestation
+return	com/samsung/android/knox/integrity/EnhancedAttestationPolicy	isBldpEventSupported()Z	false
+
+# About phone: One UI minor version and the real model (from UN1CA settings)
+return	com/samsung/android/settings/deviceinfo/softwareinfo/OneUIVersionPreferenceController	isDeviceWithMicroVersion()Z	true
+replace	com/samsung/android/settings/deviceinfo/aboutphone/ModelNameGetter	getModelName()Ljava/lang/String;	"ro.product.model"	"ro.boot.em.model"
+
+# Motion smoothness: the A14 panel is 60 Hz only, hide the menu
+return	com/samsung/android/settings/Rune	supportHighRefreshRate(Landroid/content/Context;I)Z	false
+
+# Eye comfort shield without mDNIe: preview the level through the SystemUI overlay
+replace	com/samsung/android/settings/eyecomfort/EyeComfortSeekBarPreference	onProgressChanged(Landroidx/appcompat/widget/SeslSeekBar;IZ)V	    const-string p3, "mDNIe"\n\n    invoke-virtual {v0, p3}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;\n\n    move-result-object p3\n\n    check-cast p3, Lcom/samsung/android/hardware/display/SemMdnieManager;\n\n    const/4 v0, 0x1\n\n    invoke-virtual {p3, v0, p2}, Lcom/samsung/android/hardware/display/SemMdnieManager;->setNightMode(ZI)Z\n\n    goto :goto_1\n	    const-string p3, "statusbar"\n\n    invoke-static {p3}, Landroid/os/ServiceManager;->checkService(Ljava/lang/String;)Landroid/os/IBinder;\n\n    move-result-object p3\n\n    invoke-static {p3}, Lcom/android/internal/statusbar/IStatusBarService$Stub;->asInterface(Landroid/os/IBinder;)Lcom/android/internal/statusbar/IStatusBarService;\n\n    move-result-object p3\n\n    if-eqz p3, :goto_1\n\n    const/4 v0, 0x1\n\n    :try_start_blf\n    invoke-interface {p3, v0, p2}, Lcom/android/internal/statusbar/IStatusBarService;->setBlueLightFilter(ZI)V\n    :try_end_blf\n    .catch Landroid/os/RemoteException; {:try_start_blf .. :try_end_blf} :catch_blf\n\n    goto :goto_1\n\n    :catch_blf\n    goto :goto_1\n
+replace	com/samsung/android/settings/eyecomfort/EyeComfortSeekBarPreference	onStopTrackingTouch(Landroidx/appcompat/widget/SeslSeekBar;)V	    const-string v1, "mDNIe"\n\n    invoke-virtual {p1, v1}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;\n\n    move-result-object p1\n\n    check-cast p1, Lcom/samsung/android/hardware/display/SemMdnieManager;\n\n    invoke-virtual {p1, v0, v0}, Lcom/samsung/android/hardware/display/SemMdnieManager;->setNightMode(ZI)Z\n	    const-string p1, "statusbar"\n\n    invoke-static {p1}, Landroid/os/ServiceManager;->checkService(Ljava/lang/String;)Landroid/os/IBinder;\n\n    move-result-object p1\n\n    invoke-static {p1}, Lcom/android/internal/statusbar/IStatusBarService$Stub;->asInterface(Landroid/os/IBinder;)Lcom/android/internal/statusbar/IStatusBarService;\n\n    move-result-object p1\n\n    if-eqz p1, :cond_blf_skip\n\n    :try_start_blf\n    invoke-interface {p1, v0, v0}, Lcom/android/internal/statusbar/IStatusBarService;->setBlueLightFilter(ZI)V\n    :try_end_blf\n    .catch Landroid/os/RemoteException; {:try_start_blf .. :try_end_blf} :cond_blf_skip\n\n    :cond_blf_skip\n

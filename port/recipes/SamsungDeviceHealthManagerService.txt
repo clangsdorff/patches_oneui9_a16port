@@ -1,0 +1,10 @@
+# DVFS / SSRM policy retargeted to the A14 (Exynos 850)
+replace	k4/e	<init>(Landroid/content/Context;)V	"dvfs_policy_s5e8825_xx"	"dvfs_policy_s5e3830_xx"
+replace	c4/c	<clinit>()V	"dvfs_policy_s5e8825_xx"	"dvfs_policy_s5e3830_xx"
+replace	n5/i0	<clinit>()V	"siop_a16x_s5e8535"	"siop_a14_exynos850"
+rmfile	assets/siop_default
+rmfile	assets/siop_model
+rmfile	assets/ssrm_default
+putfile	../files/dvfs/siop_default.xml	assets/siop_default.xml
+putfile	../files/dvfs/siop_a14_exynos850.xml	assets/siop_a14_exynos850.xml
+putfile	../files/dvfs/siop_default.xml	assets/ssrm_default.xml

@@ -1,0 +1,12 @@
+# Knox integrity always reports a locked, verified device
+return	com/samsung/android/kmxservice/common/util/IntegrityStatus	getStatus()I	0x0
+return	com/samsung/android/kmxservice/common/util/IntegrityStatus	isNormal()Z	true
+return	com/samsung/android/kmxservice/common/util/RootOfTrust	getVerifiedBootState()I	0x0
+return	com/samsung/android/kmxservice/common/util/RootOfTrust	isDeviceLocked()Z	true
+return	com/samsung/android/kmxservice/fabrickeystore/keystore/cert/IntegrityStatus	isNormal()Z	true
+return	com/samsung/android/kmxservice/fabrickeystore/keystore/cert/RootOfTrust	getVerifiedBootState()I	0x0
+return	com/samsung/android/kmxservice/fabrickeystore/keystore/cert/RootOfTrust	isDeviceLocked()Z	true
+return	com/samsung/android/kmxservice/sdk/trustchain/util/IntegrityStatus	getStatus()I	0x0
+return	com/samsung/android/kmxservice/sdk/trustchain/util/IntegrityStatus	isNormal()Z	true
+return	com/samsung/android/kmxservice/sdk/trustchain/util/RootOfTrust	getVerifiedBootState()I	0x0
+return	com/samsung/android/kmxservice/sdk/trustchain/util/RootOfTrust	isDeviceLocked()Z	true

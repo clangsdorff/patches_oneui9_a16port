@@ -1,0 +1,10 @@
+# Device detection follows the A14 vendor
+replace	com/samsung/android/rune/CoreRune	<clinit>()V	"ro.product.device"	"ro.product.vendor.device"
+
+# AI permission data collection off
+null	com/samsung/android/kmxservice/ai/privacy/PermissionDataController	flush()V
+null	com/samsung/android/kmxservice/ai/privacy/PermissionDataController	flushAsync()V
+null	com/samsung/android/kmxservice/ai/privacy/PermissionDataController	write(IILjava/lang/String;I)V
+
+# No "vendor/system mismatch" warning: the A14 vendor never matches the A16 system
+return	android/os/Build	isBuildConsistent()Z	true

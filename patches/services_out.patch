@@ -1,0 +1,1675 @@
+diff --git a/smali/com/android/server/NandswapManager.smali b/smali/com/android/server/NandswapManager.smali
+index c61cf2a8..10c10c9b 100644
+--- a/smali/com/android/server/NandswapManager.smali
++++ b/smali/com/android/server/NandswapManager.smali
+@@ -841,48 +841,11 @@
+ .end method
+ 
+ .method public static getDefaultRamExpandSize()I
+-    .locals 3
+-
+-    const-string/jumbo v0, "ro.sys.kernelmemory.nandswap.higher_max_size"
+-
+-    const/4 v1, 0x0
+-
+-    invoke-static {v0, v1}, Landroid/os/SystemProperties;->getBoolean(Ljava/lang/String;Z)Z
+-
+-    move-result v0
+-
+-    if-eqz v0, :cond_0
+-
+-    sget v0, Lcom/android/server/NandswapManager;->storageSize:I
+-
+-    const/16 v2, 0x100
+-
+-    if-lt v0, v2, :cond_0
+-
+-    const/16 v0, 0x2000
+-
+-    return v0
+-
+-    :cond_0
+-    sget v0, Lcom/android/server/NandswapManager;->storageSize:I
+-
+-    const/16 v2, 0x20
+-
+-    if-le v0, v2, :cond_1
+-
+-    const/16 v0, 0x1000
+-
+-    return v0
+-
+-    :cond_1
+-    if-ne v0, v2, :cond_2
++    .locals 1
+ 
+-    const/16 v0, 0x800
++    const/4 v0, 0
+ 
+     return v0
+-
+-    :cond_2
+-    return v1
+ .end method
+ 
+ .method public static makeNandswapBigdataManager(Landroid/content/Context;)Z
+diff --git a/smali/com/android/server/StorageManagerService.smali b/smali/com/android/server/StorageManagerService.smali
+index 1e758df3..d070f657 100644
+--- a/smali/com/android/server/StorageManagerService.smali
++++ b/smali/com/android/server/StorageManagerService.smali
+@@ -1689,187 +1689,11 @@
+ .end method
+ 
+ .method public static isRootedDevice()Z
+-    .locals 15
+-
+-    const-string/jumbo v0, "ro.boot.flash.locked"
+-
+-    invoke-static {v0}, Landroid/os/SystemProperties;->get(Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object v0
+-
+-    new-instance v1, Ljava/lang/StringBuilder;
+-
+-    const-string/jumbo v2, "phone status : "
+-
+-    invoke-direct {v1, v2}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+-
+-    invoke-virtual {v1, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+-
+-    move-result-object v0
+-
+-    const-string/jumbo v1, "StorageManagerService"
+-
+-    invoke-static {v1, v0}, Landroid/util/sysfwutil/Slog;->d(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    const-string v13, "/system/usr/we-need-root/su-backup"
+-
+-    const-string v14, "/system/xbin/mu"
+-
+-    const-string v2, "/sbin/su"
+-
+-    const-string v3, "/system/su"
+-
+-    const-string v4, "/system/bin/su"
+-
+-    const-string v5, "/system/xbin/su"
+-
+-    const-string v6, "/system/bin/.ext/.su"
+-
+-    const-string v7, "/data/local/xbin/su"
+-
+-    const-string v8, "/data/local/bin/su"
+-
+-    const-string v9, "/system/sd/xbin/su"
+-
+-    const-string v10, "/system/bin/failsafe/su"
+-
+-    const-string v11, "/data/local/su"
+-
+-    const-string v12, "/system/app/Superuser.apk"
+-
+-    filled-new-array/range {v2 .. v14}, [Ljava/lang/String;
+-
+-    move-result-object v0
+-
+-    const-string v11, "/proc"
+-
+-    const-string v12, "/dev"
+-
+-    const-string v2, "/data"
+-
+-    const-string v3, "/system"
+-
+-    const-string v4, "/system/bin"
+-
+-    const-string v5, "/system/sbin"
+-
+-    const-string v6, "/system/xbin"
+-
+-    const-string v7, "/vendor/bin"
+-
+-    const-string v8, "/sys"
+-
+-    const-string v9, "/sbin"
+-
+-    const-string v10, "/etc"
+-
+-    filled-new-array/range {v2 .. v12}, [Ljava/lang/String;
+-
+-    move-result-object v2
+-
+-    const/4 v3, 0x0
+-
+-    move v4, v3
+-
+-    :goto_0
+-    const/16 v5, 0xd
+-
+-    if-ge v4, v5, :cond_2
+-
+-    aget-object v5, v0, v4
+-
+-    invoke-static {v5}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
+-
+-    move-result v6
+-
+-    if-eqz v6, :cond_0
+-
+-    goto :goto_1
+-
+-    :cond_0
+-    invoke-static {v5}, Lcom/android/server/BatteryService$$ExternalSyntheticOutline0;->m(Ljava/lang/String;)Z
+-
+-    move-result v6
+-
+-    if-eqz v6, :cond_1
+-
+-    new-instance v0, Ljava/lang/StringBuilder;
+-
+-    const-string/jumbo v2, "rooting:su located at : "
+-
+-    invoke-direct {v0, v2}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+-
+-    invoke-virtual {v0, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+-
+-    move-result-object v0
+-
+-    invoke-static {v1, v0}, Landroid/util/sysfwutil/Slog;->d(Ljava/lang/String;Ljava/lang/String;)I
++    .locals 1
+ 
+-    const/4 v0, 0x1
++    const/4 v0, 0x0
+ 
+     return v0
+-
+-    :cond_1
+-    add-int/lit8 v4, v4, 0x1
+-
+-    goto :goto_0
+-
+-    :cond_2
+-    :goto_1
+-    move v0, v3
+-
+-    :goto_2
+-    const/16 v4, 0xb
+-
+-    if-ge v0, v4, :cond_5
+-
+-    aget-object v4, v2, v0
+-
+-    invoke-static {v4}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
+-
+-    move-result v5
+-
+-    if-eqz v5, :cond_3
+-
+-    goto :goto_3
+-
+-    :cond_3
+-    new-instance v5, Ljava/io/File;
+-
+-    invoke-direct {v5, v4}, Ljava/io/File;-><init>(Ljava/lang/String;)V
+-
+-    invoke-virtual {v5}, Ljava/io/File;->canWrite()Z
+-
+-    move-result v5
+-
+-    if-eqz v5, :cond_4
+-
+-    new-instance v5, Ljava/lang/StringBuilder;
+-
+-    const-string/jumbo v6, "rooting:read only changed as writable : "
+-
+-    invoke-direct {v5, v6}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+-
+-    invoke-virtual {v5, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {v5}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+-
+-    move-result-object v4
+-
+-    invoke-static {v1, v4}, Landroid/util/sysfwutil/Slog;->d(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    :cond_4
+-    add-int/lit8 v0, v0, 0x1
+-
+-    goto :goto_2
+-
+-    :cond_5
+-    :goto_3
+-    return v3
+ .end method
+ 
+ .method public static isValidPath(Ljava/lang/String;)Z
+diff --git a/smali/com/android/server/am/FreecessController.smali b/smali/com/android/server/am/FreecessController.smali
+index e954cbcd..3184d766 100644
+--- a/smali/com/android/server/am/FreecessController.smali
++++ b/smali/com/android/server/am/FreecessController.smali
+@@ -201,7 +201,7 @@
+ .method static constructor <clinit>()V
+     .locals 5
+ 
+-    const-string/jumbo v0, "ro.product.model"
++    const-string/jumbo v0, "ro.product.vendor.model"
+ 
+     invoke-static {v0}, Landroid/os/SystemProperties;->get(Ljava/lang/String;)Ljava/lang/String;
+ 
+diff --git a/smali/com/android/server/asks/ASKSManagerService.smali b/smali/com/android/server/asks/ASKSManagerService.smali
+index 1fe8acb6..ffaae442 100644
+--- a/smali/com/android/server/asks/ASKSManagerService.smali
++++ b/smali/com/android/server/asks/ASKSManagerService.smali
+@@ -4676,7 +4676,7 @@
+     move-object p1, v0
+ 
+     :goto_0
+-    const-string/jumbo v1, "ro.build.official.release"
++    const-string/jumbo v1, "ro.build.official.release.asks"
+ 
+     const-string/jumbo v2, "false"
+ 
+@@ -28544,7 +28544,7 @@
+     :cond_6
+     const-string/jumbo v0, "true"
+ 
+-    const-string/jumbo v1, "ro.build.official.release"
++    const-string/jumbo v1, "ro.build.official.release.asks"
+ 
+     const-string/jumbo v2, "false"
+ 
+@@ -30560,7 +30560,7 @@
+ 
+     invoke-virtual {v6, v10}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+ 
+-    const-string/jumbo v6, "ro.build.official.release"
++    const-string/jumbo v6, "ro.build.official.release.asks"
+ 
+     invoke-static {v6}, Landroid/os/SystemProperties;->get(Ljava/lang/String;)Ljava/lang/String;
+ 
+diff --git a/smali/com/android/server/knox/dar/DarManagerService.smali b/smali/com/android/server/knox/dar/DarManagerService.smali
+index 664a7e96..b860ffc7 100644
+--- a/smali/com/android/server/knox/dar/DarManagerService.smali
++++ b/smali/com/android/server/knox/dar/DarManagerService.smali
+@@ -454,64 +454,11 @@
+ .end method
+ 
+ .method public final checkDeviceIntegrity([Ljava/security/cert/Certificate;)Z
+-    .locals 3
+-
+-    const/4 v0, 0x0
+-
+-    aget-object p1, p1, v0
+-
+-    check-cast p1, Ljava/security/cert/X509Certificate;
+-
+-    :try_start_0
+-    new-instance v1, Lcom/android/server/knox/dar/AttestedCertParser;
+-
+-    invoke-direct {v1, p1}, Lcom/android/server/knox/dar/AttestedCertParser;-><init>(Ljava/security/cert/X509Certificate;)V
+-
+-    iget-object p1, v1, Lcom/android/server/knox/dar/AttestedCertParser;->mKnoxIngetrity:Lcom/android/server/knox/dar/IntegrityStatus;
+-
+-    const/4 v1, 0x1
+-
+-    if-eqz p1, :cond_0
+-
+-    iget v2, p1, Lcom/android/server/knox/dar/IntegrityStatus;->mWarranty:I
+-
+-    if-nez v2, :cond_0
+-
+-    iget p1, p1, Lcom/android/server/knox/dar/IntegrityStatus;->mTrustBoot:I
+-
+-    if-nez p1, :cond_0
+-
+-    return v1
+-
+-    :catch_0
+-    move-exception p0
+-
+-    goto :goto_0
+-
+-    :cond_0
+-    invoke-virtual {p0}, Lcom/android/server/knox/dar/DarManagerService;->isEmTokenAllowed()Z
+-
+-    move-result p0
+-
+-    if-eqz p0, :cond_1
+-
+-    const-string p0, "DarManagerService"
+-
+-    const-string p1, "Failed in device integrity check. But, EM Token is allowed. Continue - "
+-
+-    invoke-static {p0, p1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+-    :try_end_0
+-    .catch Ljava/security/cert/CertificateParsingException; {:try_start_0 .. :try_end_0} :catch_0
+-
+-    return v1
+-
+-    :cond_1
+-    return v0
++    .locals 0
+ 
+-    :goto_0
+-    invoke-virtual {p0}, Ljava/security/cert/CertificateParsingException;->printStackTrace()V
++    const/4 p0, 0x1
+ 
+-    return v0
++    return p0
+ .end method
+ 
+ .method public final checkSystemPermission()V
+@@ -1263,256 +1210,11 @@
+ .end method
+ 
+ .method public final isDeviceRootKeyInstalled()Z
+-    .locals 10
+-
+-    const-string/jumbo v0, "ro.hardware.virtual_device"
+-
+-    invoke-static {v0}, Landroid/os/SystemProperties;->get(Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object v0
+-
+-    const-string v1, "1"
+-
+-    invoke-virtual {v1, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+-
+-    move-result v0
+-
+-    const/4 v1, 0x1
+-
+-    const-string v2, "DarManagerService"
+-
+-    if-eqz v0, :cond_0
+-
+-    const-string/jumbo p0, "Will be Failed in device integrity check. But, running on VirtualDevice. Continue .. "
+-
+-    invoke-static {v2, p0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    return v1
+-
+-    :cond_0
+-    const-string/jumbo v0, "ro.security.keystore.keytype"
+-
+-    invoke-static {v0}, Landroid/os/SystemProperties;->get(Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object v0
+-
+-    const-string/jumbo v3, "sakm"
+-
+-    invoke-virtual {v0, v3}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
+-
+-    move-result v0
+-
+-    const/4 v3, 0x0
+-
+-    if-eqz v0, :cond_4
+-
+-    const-string v0, "Check SAK instead for JDM with GRDM or KnoxVault2"
+-
+-    invoke-static {v2, v0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    const-string v0, "KnoxTestKey"
+-
+-    const-string v4, "Failed while check SAK : "
+-
+-    iget-object v5, p0, Lcom/android/server/knox/dar/DarManagerService;->mInjector:Lcom/android/server/knox/dar/DarManagerService$Injector;
+-
+-    invoke-virtual {v5}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
+-
+-    invoke-static {}, Landroid/os/Binder;->clearCallingIdentity()J
+-
+-    move-result-wide v5
+-
+-    :try_start_0
+-    new-instance v7, Lcom/samsung/android/security/keystore/AttestationUtils;
+-
+-    invoke-direct {v7}, Lcom/samsung/android/security/keystore/AttestationUtils;-><init>()V
+-
+-    sget-object v8, Lcom/android/server/knox/dar/SecureUtil;->sSecureRandom:Ljava/security/SecureRandom;
+-
+-    const/16 v9, 0x8
+-
+-    invoke-virtual {v8, v9}, Ljava/security/SecureRandom;->generateSeed(I)[B
+-
+-    move-result-object v8
+-
+-    invoke-virtual {v7, v0, v8}, Lcom/samsung/android/security/keystore/AttestationUtils;->generateKeyPair(Ljava/lang/String;[B)Ljava/security/KeyPair;
+-
+-    move-result-object v7
+-
+-    if-eqz v7, :cond_1
+-
+-    move v3, v1
+-
+-    :cond_1
+-    if-eqz v3, :cond_2
+-
+-    const-string v7, "Generated keypair is protected by SAK"
+-
+-    invoke-static {v2, v7}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    invoke-static {v0}, Lcom/samsung/android/security/keystore/AttestationUtils;->deleteKey(Ljava/lang/String;)V
+-    :try_end_0
+-    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
+-    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+-
+-    goto :goto_0
+-
+-    :catchall_0
+-    move-exception v0
+-
+-    goto :goto_4
+-
+-    :catch_0
+-    move-exception v0
+-
+-    goto :goto_1
+-
+-    :cond_2
+-    :goto_0
+-    iget-object p0, p0, Lcom/android/server/knox/dar/DarManagerService;->mInjector:Lcom/android/server/knox/dar/DarManagerService$Injector;
+-
+-    invoke-virtual {p0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
+-
+-    invoke-static {v5, v6}, Landroid/os/Binder;->restoreCallingIdentity(J)V
+-
+-    goto :goto_3
+-
+-    :goto_1
+-    :try_start_1
+-    invoke-virtual {p0}, Lcom/android/server/knox/dar/DarManagerService;->isEmTokenAllowed()Z
+-
+-    move-result v7
+-
+-    if-eqz v7, :cond_3
+-
+-    const-string v0, "Failed while check SAK. But, EM Token is allowed. Continue - "
+-
+-    invoke-static {v2, v0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    goto :goto_2
+-
+-    :cond_3
+-    new-instance v1, Ljava/lang/StringBuilder;
+-
+-    invoke-direct {v1, v4}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+-
+-    invoke-virtual {v0}, Ljava/lang/Exception;->toString()Ljava/lang/String;
+-
+-    move-result-object v4
+-
+-    invoke-virtual {v1, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+-
+-    move-result-object v1
+-
+-    invoke-static {v2, v1}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    invoke-virtual {v0}, Ljava/lang/Exception;->printStackTrace()V
+-    :try_end_1
+-    .catchall {:try_start_1 .. :try_end_1} :catchall_0
+-
+-    move v1, v3
+-
+-    :goto_2
+-    iget-object p0, p0, Lcom/android/server/knox/dar/DarManagerService;->mInjector:Lcom/android/server/knox/dar/DarManagerService$Injector;
+-
+-    invoke-virtual {p0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
+-
+-    invoke-static {v5, v6}, Landroid/os/Binder;->restoreCallingIdentity(J)V
+-
+-    move v3, v1
+-
+-    :goto_3
+-    invoke-static {v3}, Lcom/android/server/knox/dar/SecureUtil;->record(Z)V
+-
+-    return v3
+-
+-    :goto_4
+-    iget-object p0, p0, Lcom/android/server/knox/dar/DarManagerService;->mInjector:Lcom/android/server/knox/dar/DarManagerService$Injector;
+-
+-    invoke-virtual {p0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
+-
+-    invoke-static {v5, v6}, Landroid/os/Binder;->restoreCallingIdentity(J)V
+-
+-    throw v0
+-
+-    :cond_4
+-    iget-object v0, p0, Lcom/android/server/knox/dar/DarManagerService;->mInjector:Lcom/android/server/knox/dar/DarManagerService$Injector;
+-
+-    invoke-virtual {v0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
+-
+-    invoke-static {}, Landroid/os/Binder;->clearCallingIdentity()J
+-
+-    move-result-wide v4
+-
+-    :try_start_2
+-    new-instance v0, Lcom/samsung/android/service/DeviceRootKeyService/DeviceRootKeyServiceManager;
+-
+-    iget-object v6, p0, Lcom/android/server/knox/dar/DarManagerService;->mContext:Landroid/content/Context;
+-
+-    invoke-direct {v0, v6}, Lcom/samsung/android/service/DeviceRootKeyService/DeviceRootKeyServiceManager;-><init>(Landroid/content/Context;)V
+-
+-    invoke-virtual {v0}, Lcom/samsung/android/service/DeviceRootKeyService/DeviceRootKeyServiceManager;->isAliveDeviceRootKeyService()Z
+-
+-    move-result v6
+-
+-    if-nez v6, :cond_5
+-
+-    const-string v0, "DRK service is not ready..."
+-
+-    invoke-static {v2, v0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    goto :goto_5
+-
+-    :catchall_1
+-    move-exception v0
+-
+-    goto :goto_8
+-
+-    :catch_1
+-    move-exception v0
+-
+-    goto :goto_6
+-
+-    :cond_5
+-    invoke-virtual {v0, v1}, Lcom/samsung/android/service/DeviceRootKeyService/DeviceRootKeyServiceManager;->isExistDeviceRootKey(I)Z
+-
+-    move-result v3
+-    :try_end_2
+-    .catch Ljava/lang/Exception; {:try_start_2 .. :try_end_2} :catch_1
+-    .catchall {:try_start_2 .. :try_end_2} :catchall_1
+-
+-    :goto_5
+-    iget-object p0, p0, Lcom/android/server/knox/dar/DarManagerService;->mInjector:Lcom/android/server/knox/dar/DarManagerService$Injector;
+-
+-    invoke-virtual {p0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
+-
+-    invoke-static {v4, v5}, Landroid/os/Binder;->restoreCallingIdentity(J)V
+-
+-    goto :goto_7
+-
+-    :goto_6
+-    :try_start_3
+-    invoke-virtual {v0}, Ljava/lang/Exception;->printStackTrace()V
+-    :try_end_3
+-    .catchall {:try_start_3 .. :try_end_3} :catchall_1
+-
+-    goto :goto_5
+-
+-    :goto_7
+-    invoke-static {v3}, Lcom/android/server/knox/dar/SecureUtil;->record(Z)V
+-
+-    return v3
+-
+-    :goto_8
+-    iget-object p0, p0, Lcom/android/server/knox/dar/DarManagerService;->mInjector:Lcom/android/server/knox/dar/DarManagerService$Injector;
+-
+-    invoke-virtual {p0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
++    .locals 0
+ 
+-    invoke-static {v4, v5}, Landroid/os/Binder;->restoreCallingIdentity(J)V
++    const/4 p0, 0x1
+ 
+-    throw v0
++    return p0
+ .end method
+ 
+ .method public final isEmTokenAllowed()Z
+@@ -1564,200 +1266,11 @@
+ .end method
+ 
+ .method public final isKnoxKeyInstallable()Z
+-    .locals 17
+-
+-    move-object/from16 v1, p0
+-
+-    const-string v0, "EC"
+-
+-    const-string v2, "KnoxTestKey"
+-
+-    const-string/jumbo v3, "ro.hardware.virtual_device"
+-
+-    invoke-static {v3}, Landroid/os/SystemProperties;->get(Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object v3
+-
+-    const-string v4, "1"
+-
+-    invoke-virtual {v4, v3}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+-
+-    move-result v3
+-
+-    const/4 v4, 0x1
+-
+-    if-eqz v3, :cond_0
+-
+-    const-string v0, "DarManagerService"
+-
+-    const-string/jumbo v1, "Will be Failed in device integrity check. But, running on VirtualDevice. Continue - "
+-
+-    invoke-static {v0, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    return v4
+-
+-    :cond_0
+-    iget-object v3, v1, Lcom/android/server/knox/dar/DarManagerService;->mInjector:Lcom/android/server/knox/dar/DarManagerService$Injector;
+-
+-    invoke-virtual {v3}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
+-
+-    invoke-static {}, Landroid/os/Binder;->clearCallingIdentity()J
+-
+-    move-result-wide v5
+-
+-    const/4 v3, 0x0
+-
+-    :try_start_0
+-    new-instance v7, Lcom/samsung/android/security/keystore/AttestationUtils;
+-
+-    invoke-direct {v7}, Lcom/samsung/android/security/keystore/AttestationUtils;-><init>()V
+-
+-    sget-object v8, Lcom/android/server/knox/dar/SecureUtil;->sSecureRandom:Ljava/security/SecureRandom;
+-
+-    const/16 v9, 0x8
+-
+-    invoke-virtual {v8, v9}, Ljava/security/SecureRandom;->generateSeed(I)[B
+-
+-    move-result-object v8
+-
+-    if-eqz v8, :cond_3
+-
+-    new-instance v9, Landroid/security/keystore/KeyGenParameterSpec$Builder;
+-
+-    const/4 v10, 0x4
+-
+-    invoke-direct {v9, v2, v10}, Landroid/security/keystore/KeyGenParameterSpec$Builder;-><init>(Ljava/lang/String;I)V
+-
+-    const-string/jumbo v11, "NONE"
+-
+-    const-string/jumbo v12, "SHA-1"
+-
+-    const-string/jumbo v13, "SHA-224"
+-
+-    const-string/jumbo v14, "SHA-256"
+-
+-    const-string/jumbo v15, "SHA-384"
+-
+-    const-string/jumbo v16, "SHA-512"
+-
+-    filled-new-array/range {v11 .. v16}, [Ljava/lang/String;
+-
+-    move-result-object v10
+-
+-    invoke-virtual {v9, v10}, Landroid/security/keystore/KeyGenParameterSpec$Builder;->setDigests([Ljava/lang/String;)Landroid/security/keystore/KeyGenParameterSpec$Builder;
+-
+-    move-result-object v9
+-
+-    invoke-virtual {v9}, Landroid/security/keystore/KeyGenParameterSpec$Builder;->build()Landroid/security/keystore/KeyGenParameterSpec;
+-
+-    move-result-object v9
+-
+-    new-instance v10, Lcom/samsung/android/security/keystore/AttestParameterSpec;
+-
+-    invoke-direct {v10}, Ljava/lang/Object;-><init>()V
+-
+-    invoke-static {v0}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
+-
+-    move-result v11
+-
+-    if-eqz v11, :cond_1
+-
+-    iput-object v0, v10, Lcom/samsung/android/security/keystore/AttestParameterSpec;->mAlgorithm:Ljava/lang/String;
+-
+-    goto :goto_0
+-
+-    :cond_1
+-    iput-object v0, v10, Lcom/samsung/android/security/keystore/AttestParameterSpec;->mAlgorithm:Ljava/lang/String;
+-
+-    :goto_0
+-    invoke-virtual {v8}, [B->clone()Ljava/lang/Object;
+-
+-    move-result-object v0
+-
+-    check-cast v0, [B
+-
+-    iput-object v0, v10, Lcom/samsung/android/security/keystore/AttestParameterSpec;->mChallenge:[B
+-
+-    iput-boolean v4, v10, Lcom/samsung/android/security/keystore/AttestParameterSpec;->mVerifiableIntegrity:Z
+-
+-    iput-boolean v3, v10, Lcom/samsung/android/security/keystore/AttestParameterSpec;->mSAKUidRequired:Z
+-
+-    iput-object v9, v10, Lcom/samsung/android/security/keystore/AttestParameterSpec;->mSpec:Landroid/security/keystore/KeyGenParameterSpec;
+-
+-    invoke-static {}, Ljava/lang/invoke/VarHandle;->storeStoreFence()V
+-
+-    invoke-virtual {v7, v10}, Lcom/samsung/android/security/keystore/AttestationUtils;->generateKeyPair(Lcom/samsung/android/security/keystore/AttestParameterSpec;)Ljava/security/KeyPair;
+-
+-    move-result-object v0
+-
+-    if-eqz v0, :cond_2
+-
+-    invoke-static {v2}, Lcom/samsung/android/security/keystore/AttestationUtils;->getCertificateChain(Ljava/lang/String;)[Ljava/security/cert/Certificate;
+-
+-    move-result-object v0
+-
+-    invoke-virtual {v1, v0}, Lcom/android/server/knox/dar/DarManagerService;->checkDeviceIntegrity([Ljava/security/cert/Certificate;)Z
+-
+-    move-result v3
+-
+-    if-eqz v3, :cond_2
+-
+-    invoke-static {v2}, Lcom/samsung/android/security/keystore/AttestationUtils;->deleteKey(Ljava/lang/String;)V
+-    :try_end_0
+-    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
+-    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+-
+-    goto :goto_1
+-
+-    :catchall_0
+-    move-exception v0
+-
+-    goto :goto_3
+-
+-    :catch_0
+-    move-exception v0
+-
+-    goto :goto_2
+-
+-    :cond_2
+-    :goto_1
+-    iget-object v0, v1, Lcom/android/server/knox/dar/DarManagerService;->mInjector:Lcom/android/server/knox/dar/DarManagerService$Injector;
+-
+-    invoke-virtual {v0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
+-
+-    invoke-static {v5, v6}, Landroid/os/Binder;->restoreCallingIdentity(J)V
+-
+-    return v3
+-
+-    :cond_3
+-    :try_start_1
+-    new-instance v0, Ljava/lang/NullPointerException;
+-
+-    const-string/jumbo v2, "challenge == null"
+-
+-    invoke-direct {v0, v2}, Ljava/lang/NullPointerException;-><init>(Ljava/lang/String;)V
+-
+-    throw v0
+-    :try_end_1
+-    .catch Ljava/lang/Exception; {:try_start_1 .. :try_end_1} :catch_0
+-    .catchall {:try_start_1 .. :try_end_1} :catchall_0
+-
+-    :goto_2
+-    :try_start_2
+-    invoke-virtual {v0}, Ljava/lang/Exception;->printStackTrace()V
+-    :try_end_2
+-    .catchall {:try_start_2 .. :try_end_2} :catchall_0
+-
+-    goto :goto_1
+-
+-    :goto_3
+-    iget-object v1, v1, Lcom/android/server/knox/dar/DarManagerService;->mInjector:Lcom/android/server/knox/dar/DarManagerService$Injector;
+-
+-    invoke-virtual {v1}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
++    .locals 0
+ 
+-    invoke-static {v5, v6}, Landroid/os/Binder;->restoreCallingIdentity(J)V
++    const/4 p0, 0x1
+ 
+-    throw v0
++    return p0
+ .end method
+ 
+ .method public final isLicensed()I
+diff --git a/smali_classes2/com/android/server/pm/InstallPackageHelper.smali b/smali_classes2/com/android/server/pm/InstallPackageHelper.smali
+index 3aea1506..e258708d 100644
+--- a/smali_classes2/com/android/server/pm/InstallPackageHelper.smali
++++ b/smali_classes2/com/android/server/pm/InstallPackageHelper.smali
+@@ -597,6 +597,47 @@
+ 
+     move-object/from16 v0, p1
+ 
++    sget-object v3, Lcom/samsung/android/server/pm/install/PackageBlockListPolicy;->sLduBlocklist:Ljava/util/HashSet;
++
++    if-nez v3, :cond_blocklist_ready
++
++    const-string v3, "/system/etc/blocklist.xml"
++
++    invoke-static {v3}, Lcom/samsung/android/server/pm/install/PmConfigParser;->parsePackages(Ljava/lang/String;)Ljava/util/List;
++
++    move-result-object v3
++
++    new-instance v4, Ljava/util/HashSet;
++
++    invoke-direct {v4, v3}, Ljava/util/HashSet;-><init>(Ljava/util/Collection;)V
++
++    sput-object v4, Lcom/samsung/android/server/pm/install/PackageBlockListPolicy;->sLduBlocklist:Ljava/util/HashSet;
++
++    move-object v3, v4
++
++    :cond_blocklist_ready
++    invoke-interface {v0}, Lcom/android/server/pm/pkg/AndroidPackage;->getPackageName()Ljava/lang/String;
++
++    move-result-object v4
++
++    invoke-virtual {v3, v4}, Ljava/util/HashSet;->contains(Ljava/lang/Object;)Z
++
++    move-result v3
++
++    if-eqz v3, :cond_blocklist_pass
++
++    new-instance v3, Lcom/android/server/pm/PackageManagerException;
++
++    const/16 v2, -0x6e
++
++    const-string v4, "Package is blocklisted"
++
++    invoke-direct {v3, v2, v4}, Lcom/android/server/pm/PackageManagerException;-><init>(ILjava/lang/String;)V
++
++    throw v3
++
++    :cond_blocklist_pass
++
+     move/from16 v2, p3
+ 
+     move-object/from16 v3, p5
+@@ -22441,11 +22482,7 @@
+     .catchall {:try_start_4 .. :try_end_4} :catchall_0
+ 
+     :try_start_5
+-    sget-object v2, Lcom/samsung/android/server/pm/install/PackageBlockListPolicy;->sIsRduDevice:Ljava/util/concurrent/atomic/AtomicBoolean;
+-
+-    invoke-virtual {v2}, Ljava/util/concurrent/atomic/AtomicBoolean;->get()Z
+-
+-    move-result v2
++    const/4 v2, 0x1
+ 
+     if-nez v2, :cond_7
+ 
+@@ -22456,7 +22493,7 @@
+ 
+     if-nez v2, :cond_8
+ 
+-    const-string v2, "/system/etc/ldu_blocklist.xml"
++    const-string v2, "/system/etc/blocklist.xml"
+ 
+     invoke-static {v2}, Lcom/samsung/android/server/pm/install/PmConfigParser;->parsePackages(Ljava/lang/String;)Ljava/util/List;
+ 
+@@ -23766,6 +23803,8 @@
+     move/from16 v4, v16
+ 
+     invoke-static/range {v0 .. v5}, Lcom/android/server/pm/ScanPackageUtils;->collectCertificatesLI(Lcom/android/server/pm/PackageSetting;Lcom/android/internal/pm/parsing/pkg/ParsedPackage;Lcom/android/server/pm/Settings$VersionInfo;ZZZ)V
++
++    invoke-static {v15, v1}, Lcom/android/server/pm/ScanPackageUtils;->applyCustomSignatures(Lcom/android/server/pm/InstallPackageHelper;Lcom/android/internal/pm/parsing/pkg/ParsedPackage;)V
+     :try_end_10
+     .catch Lcom/android/server/pm/PackageManagerException; {:try_start_10 .. :try_end_10} :catch_1
+     .catchall {:try_start_10 .. :try_end_10} :catchall_4
+diff --git a/smali_classes2/com/android/server/pm/PackageManagerService.smali b/smali_classes2/com/android/server/pm/PackageManagerService.smali
+index e327efdd..c2636f13 100644
+--- a/smali_classes2/com/android/server/pm/PackageManagerService.smali
++++ b/smali_classes2/com/android/server/pm/PackageManagerService.smali
+@@ -2871,7 +2871,7 @@
+ 
+     sput-object v1, Lcom/android/server/pm/PackageManagerService;->EMPTY_INT_ARRAY:[I
+ 
+-    const/16 v1, 0x18
++    const/4 v1, 0x0
+ 
+     sput v1, Lcom/android/server/pm/PackageManagerService;->MIN_INSTALLABLE_TARGET_SDK:I
+ 
+diff --git a/smali_classes2/com/android/server/pm/PackageManagerServiceUtils.smali b/smali_classes2/com/android/server/pm/PackageManagerServiceUtils.smali
+index 9c26cbe1..f436e2c9 100644
+--- a/smali_classes2/com/android/server/pm/PackageManagerServiceUtils.smali
++++ b/smali_classes2/com/android/server/pm/PackageManagerServiceUtils.smali
+@@ -292,171 +292,9 @@
+ .end method
+ 
+ .method public static checkDowngrade(JI[Ljava/lang/String;[ILandroid/content/pm/PackageInfoLite;)V
+-    .locals 5
+-
+-    invoke-virtual {p5}, Landroid/content/pm/PackageInfoLite;->getLongVersionCode()J
+-
+-    move-result-wide v0
+-
+-    cmp-long v0, v0, p0
+-
+-    const-string v1, " is older than current "
+-
+-    const/16 v2, -0x19
+-
+-    if-ltz v0, :cond_5
+-
+-    invoke-virtual {p5}, Landroid/content/pm/PackageInfoLite;->getLongVersionCode()J
+-
+-    move-result-wide v3
+-
+-    cmp-long p0, v3, p0
+-
+-    if-nez p0, :cond_4
+-
+-    iget p0, p5, Landroid/content/pm/PackageInfoLite;->baseRevisionCode:I
+-
+-    if-lt p0, p2, :cond_3
+-
+-    iget-object p0, p5, Landroid/content/pm/PackageInfoLite;->splitNames:[Ljava/lang/String;
+-
+-    invoke-static {p0}, Lcom/android/internal/util/ArrayUtils;->isEmpty([Ljava/lang/Object;)Z
+-
+-    move-result p0
+-
+-    if-nez p0, :cond_4
+-
+-    array-length p0, p3
+-
+-    array-length p1, p4
+-
+-    if-ne p0, p1, :cond_2
+-
+-    const/4 p0, 0x0
+-
+-    :goto_0
+-    iget-object p1, p5, Landroid/content/pm/PackageInfoLite;->splitNames:[Ljava/lang/String;
+-
+-    array-length p2, p1
+-
+-    if-ge p0, p2, :cond_4
+-
+-    aget-object p1, p1, p0
+-
+-    invoke-static {p3, p1}, Lcom/android/internal/util/ArrayUtils;->indexOf([Ljava/lang/Object;Ljava/lang/Object;)I
+-
+-    move-result p2
+-
+-    const/4 v0, -0x1
+-
+-    if-eq p2, v0, :cond_1
+-
+-    iget-object v0, p5, Landroid/content/pm/PackageInfoLite;->splitRevisionCodes:[I
+-
+-    aget v0, v0, p0
+-
+-    aget v3, p4, p2
+-
+-    if-lt v0, v3, :cond_0
+-
+-    goto :goto_1
+-
+-    :cond_0
+-    new-instance p3, Lcom/android/server/pm/PackageManagerException;
+-
+-    const-string/jumbo v0, "Update split "
+-
+-    const-string v3, " revision code "
+-
+-    invoke-static {v0, p1, v3}, Landroid/net/ipmemorystore/SameL3NetworkResponse$$ExternalSyntheticOutline0;->m(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/StringBuilder;
+-
+-    move-result-object p1
+-
+-    iget-object p5, p5, Landroid/content/pm/PackageInfoLite;->splitRevisionCodes:[I
+-
+-    aget p0, p5, p0
+-
+-    invoke-virtual {p1, p0}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {p1, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-
+-    aget p0, p4, p2
+-
+-    invoke-virtual {p1, p0}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+-
+-    move-result-object p0
+-
+-    invoke-direct {p3, v2, p0}, Lcom/android/server/pm/PackageManagerException;-><init>(ILjava/lang/String;)V
+-
+-    throw p3
+-
+-    :cond_1
+-    :goto_1
+-    add-int/lit8 p0, p0, 0x1
+-
+-    goto :goto_0
+-
+-    :cond_2
+-    const-string p0, "Current split names and the split revision codes are not 1:1 mapping.This indicates that the package info data has been corrupted."
+-
+-    invoke-static {v2, p0}, Lcom/android/server/pm/PackageUsage$$ExternalSyntheticBUOutline0;->m(ILjava/lang/String;)V
+-
+-    return-void
+-
+-    :cond_3
+-    new-instance p0, Lcom/android/server/pm/PackageManagerException;
+-
+-    iget p1, p5, Landroid/content/pm/PackageInfoLite;->baseRevisionCode:I
+-
+-    new-instance p3, Ljava/lang/StringBuilder;
+-
+-    const-string/jumbo p4, "Update base revision code "
+-
+-    invoke-direct {p3, p4}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+-
+-    invoke-virtual {p3, p1}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {p3, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {p3, p2}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {p3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+-
+-    move-result-object p1
+-
+-    invoke-direct {p0, v2, p1}, Lcom/android/server/pm/PackageManagerException;-><init>(ILjava/lang/String;)V
+-
+-    throw p0
++    .locals 0
+ 
+-    :cond_4
+     return-void
+-
+-    :cond_5
+-    new-instance p2, Lcom/android/server/pm/PackageManagerException;
+-
+-    iget p3, p5, Landroid/content/pm/PackageInfoLite;->versionCode:I
+-
+-    new-instance p4, Ljava/lang/StringBuilder;
+-
+-    const-string/jumbo p5, "Update version code "
+-
+-    invoke-direct {p4, p5}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+-
+-    invoke-virtual {p4, p3}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {p4, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {p4, p0, p1}, Ljava/lang/StringBuilder;->append(J)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {p4}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+-
+-    move-result-object p0
+-
+-    invoke-direct {p2, v2, p0}, Lcom/android/server/pm/PackageManagerException;-><init>(ILjava/lang/String;)V
+-
+-    throw p2
+ .end method
+ 
+ .method public static comparePackageSignatures(Lcom/android/server/pm/PackageSetting;Landroid/content/pm/SigningDetails;)Z
+@@ -617,6 +455,16 @@
+     return p0
+ .end method
+ 
++.method public static compareSignaturesActual([Landroid/content/pm/Signature;[Landroid/content/pm/Signature;)I
++    .locals 0
++
++    invoke-static {p0, p1}, Lcom/android/server/pm/PackageManagerServiceUtils;->compareSignatureArrays([Landroid/content/pm/Signature;[Landroid/content/pm/Signature;)I
++
++    move-result p0
++
++    return p0
++.end method
++
+ .method public static copyFile(Ljava/lang/String;Ljava/io/File;Ljava/lang/String;)V
+     .locals 2
+ 
+diff --git a/smali_classes2/com/android/server/pm/ScanPackageUtils.smali b/smali_classes2/com/android/server/pm/ScanPackageUtils.smali
+index 39bbbdd6..48335689 100644
+--- a/smali_classes2/com/android/server/pm/ScanPackageUtils.smali
++++ b/smali_classes2/com/android/server/pm/ScanPackageUtils.smali
+@@ -367,9 +367,9 @@
+ 
+     move-result p1
+ 
+-    if-nez p1, :cond_b
++    if-nez p1, :cond_c
+ 
+-    if-eqz p2, :cond_c
++    if-eqz p2, :cond_b
+ 
+     invoke-interface {p2}, Lcom/android/server/pm/pkg/AndroidPackage;->getSigningDetails()Landroid/content/pm/SigningDetails;
+ 
+@@ -383,15 +383,34 @@
+ 
+     move-result p1
+ 
+-    if-nez p1, :cond_c
++    if-eqz p1, :cond_c
+ 
+     :cond_b
+-    move v1, v2
++    invoke-interface {p0}, Lcom/android/internal/pm/parsing/pkg/ParsedPackage;->getSigningDetails()Landroid/content/pm/SigningDetails;
++
++    move-result-object p1
++
++    invoke-virtual {p1}, Landroid/content/pm/SigningDetails;->getSignatures()[Landroid/content/pm/Signature;
++
++    move-result-object p1
++
++    invoke-static {}, Lcom/android/server/pm/ScanPackageUtils;->getCustomPlatformSignatures()[Landroid/content/pm/Signature;
++
++    move-result-object p2
++
++    invoke-static {p2, p1}, Lcom/android/server/pm/ScanPackageUtils;->signedWithCustomSignatures([Landroid/content/pm/Signature;[Landroid/content/pm/Signature;)Z
++
++    move-result p1
++
++    if-eqz p1, :cond_d
+ 
+     :cond_c
++    move v1, v2
++
++    :cond_d
+     invoke-interface {p0, v1}, Lcom/android/internal/pm/parsing/pkg/ParsedPackage;->setSignedWithPlatformKey(Z)Lcom/android/internal/pm/parsing/pkg/ParsedPackage;
+ 
+-    if-nez v0, :cond_d
++    if-nez v0, :cond_e
+ 
+     invoke-interface {p0}, Lcom/android/internal/pm/parsing/pkg/ParsedPackage;->clearOriginalPackages()Lcom/android/internal/pm/parsing/pkg/ParsedPackage;
+ 
+@@ -399,7 +418,7 @@
+ 
+     invoke-interface {p1}, Lcom/android/internal/pm/parsing/pkg/ParsedPackage;->clearAdoptPermissions()Lcom/android/internal/pm/parsing/pkg/ParsedPackage;
+ 
+-    :cond_d
++    :cond_e
+     invoke-static {p0, v0, p3}, Lcom/android/server/pm/parsing/library/PackageBackwardCompatibility;->modifySharedLibraries(Lcom/android/internal/pm/parsing/pkg/ParsedPackage;ZZ)V
+ 
+     return-void
+@@ -4836,6 +4855,31 @@
+     throw v0
+ .end method
+ 
++.method public static setCustomSignatures(Lcom/android/internal/pm/parsing/pkg/ParsedPackage;Lcom/android/server/pm/pkg/AndroidPackage;[Landroid/content/pm/Signature;[Landroid/content/pm/Signature;)V
++    .locals 0
++
++    invoke-static {p2, p3}, Lcom/android/server/pm/ScanPackageUtils;->signedWithCustomSignatures([Landroid/content/pm/Signature;[Landroid/content/pm/Signature;)Z
++
++    move-result p2
++
++    if-eqz p2, :cond_1
++
++    if-nez p1, :cond_0
++
++    goto :goto_0
++
++    :cond_0
++    invoke-interface {p1}, Lcom/android/server/pm/pkg/AndroidPackage;->getSigningDetails()Landroid/content/pm/SigningDetails;
++
++    move-result-object p1
++
++    invoke-interface {p0, p1}, Lcom/android/internal/pm/parsing/pkg/ParsedPackage;->setSigningDetails(Landroid/content/pm/SigningDetails;)Lcom/android/internal/pm/parsing/pkg/ParsedPackage;
++
++    :cond_1
++    :goto_0
++    return-void
++.end method
++
+ .method public static setInstantAppForUser(Lcom/android/server/pm/PackageManagerServiceInjector;Lcom/android/server/pm/PackageSetting;IZZ)V
+     .locals 6
+ 
+@@ -4968,3 +5012,76 @@
+     :goto_2
+     return-void
+ .end method
++
++.method public static signedWithCustomSignatures([Landroid/content/pm/Signature;[Landroid/content/pm/Signature;)Z
++    .locals 0
++
++    invoke-static {p0, p1}, Lcom/android/server/pm/PackageManagerServiceUtils;->compareSignaturesActual([Landroid/content/pm/Signature;[Landroid/content/pm/Signature;)I
++
++    move-result p0
++
++    if-nez p0, :cond_0
++
++    const/4 p0, 0x1
++
++    goto :goto_0
++
++    :cond_0
++    const/4 p0, 0x0
++
++    :goto_0
++    return p0
++.end method
++
++.field public static sCustomPlatformSignatures:[Landroid/content/pm/Signature;
++
++.method public static getCustomPlatformSignatures()[Landroid/content/pm/Signature;
++    .locals 3
++
++    sget-object v0, Lcom/android/server/pm/ScanPackageUtils;->sCustomPlatformSignatures:[Landroid/content/pm/Signature;
++
++    if-nez v0, :cond_0
++
++    const/4 v0, 0x1
++
++    new-array v0, v0, [Landroid/content/pm/Signature;
++
++    new-instance v1, Landroid/content/pm/Signature;
++
++    const-string v2, "PUT SIGNATURE HERE"
++
++    invoke-direct {v1, v2}, Landroid/content/pm/Signature;-><init>(Ljava/lang/String;)V
++
++    const/4 v2, 0x0
++
++    aput-object v1, v0, v2
++
++    sput-object v0, Lcom/android/server/pm/ScanPackageUtils;->sCustomPlatformSignatures:[Landroid/content/pm/Signature;
++
++    :cond_0
++    return-object v0
++.end method
++
++.method public static applyCustomSignatures(Lcom/android/server/pm/InstallPackageHelper;Lcom/android/internal/pm/parsing/pkg/ParsedPackage;)V
++    .locals 3
++
++    iget-object v0, p0, Lcom/android/server/pm/InstallPackageHelper;->mPm:Lcom/android/server/pm/PackageManagerService;
++
++    iget-object v0, v0, Lcom/android/server/pm/PackageManagerService;->mPlatformPackage:Lcom/android/server/pm/pkg/AndroidPackage;
++
++    invoke-static {}, Lcom/android/server/pm/ScanPackageUtils;->getCustomPlatformSignatures()[Landroid/content/pm/Signature;
++
++    move-result-object v1
++
++    invoke-interface {p1}, Lcom/android/internal/pm/parsing/pkg/ParsedPackage;->getSigningDetails()Landroid/content/pm/SigningDetails;
++
++    move-result-object v2
++
++    invoke-virtual {v2}, Landroid/content/pm/SigningDetails;->getSignatures()[Landroid/content/pm/Signature;
++
++    move-result-object v2
++
++    invoke-static {p1, v0, v1, v2}, Lcom/android/server/pm/ScanPackageUtils;->setCustomSignatures(Lcom/android/internal/pm/parsing/pkg/ParsedPackage;Lcom/android/server/pm/pkg/AndroidPackage;[Landroid/content/pm/Signature;[Landroid/content/pm/Signature;)V
++
++    return-void
++.end method
+diff --git a/smali_classes2/com/android/server/vibrator/HapticFeedbackVibrationProvider.smali b/smali_classes2/com/android/server/vibrator/HapticFeedbackVibrationProvider.smali
+index 2b060de3..0c848e7b 100644
+--- a/smali_classes2/com/android/server/vibrator/HapticFeedbackVibrationProvider.smali
++++ b/smali_classes2/com/android/server/vibrator/HapticFeedbackVibrationProvider.smali
+@@ -248,6 +248,10 @@
+ 
+     if-eqz p0, :cond_1
+ 
++    const/16 v0, 0x2713
++
++    if-eq p0, v0, :cond_1
++
+     const v0, 0xc3d4
+ 
+     if-ne p0, v0, :cond_0
+diff --git a/smali_classes2/com/android/server/wm/ScreenRecordingCallbackController.smali b/smali_classes2/com/android/server/wm/ScreenRecordingCallbackController.smali
+index b0c13bb2..30176fa9 100644
+--- a/smali_classes2/com/android/server/wm/ScreenRecordingCallbackController.smali
++++ b/smali_classes2/com/android/server/wm/ScreenRecordingCallbackController.smali
+@@ -47,6 +47,8 @@
+ .method public final dispatchCallbacks(Landroid/util/ArraySet;Z)V
+     .locals 5
+ 
++    const/4 p2, 0x0
++
+     invoke-virtual {p1}, Landroid/util/ArraySet;->isEmpty()Z
+ 
+     move-result v0
+diff --git a/smali_classes2/com/android/server/wm/WindowManagerService.smali b/smali_classes2/com/android/server/wm/WindowManagerService.smali
+index 7f4a4729..c92aa34d 100644
+--- a/smali_classes2/com/android/server/wm/WindowManagerService.smali
++++ b/smali_classes2/com/android/server/wm/WindowManagerService.smali
+@@ -28219,117 +28219,12 @@
+ .end method
+ 
+ .method public final notifyScreenshotListeners(I)Ljava/util/List;
+-    .locals 4
+-    .annotation system Ldalvik/annotation/Signature;
+-        value = {
+-            "(I)",
+-            "Ljava/util/List<",
+-            "Landroid/content/ComponentName;",
+-            ">;"
+-        }
+-    .end annotation
+-
+-    const-string/jumbo v0, "android.permission.STATUS_BAR_SERVICE"
+-
+-    const-string/jumbo v1, "notifyScreenshotListeners()"
+-
+-    const/4 v2, 0x1
+-
+-    invoke-virtual {p0, v0, v1, v2}, Lcom/android/server/wm/WindowManagerService;->checkCallingPermission$1(Ljava/lang/String;Ljava/lang/String;Z)Z
+-
+-    move-result v0
+-
+-    if-eqz v0, :cond_1
+-
+-    iget-object v0, p0, Lcom/android/server/wm/WindowManagerService;->mGlobalLock:Lcom/android/server/wm/WindowManagerGlobalLock;
+-
+-    invoke-static {}, Lcom/android/server/wm/WindowManagerService;->traceBeforeWmsLock()V
+-
+-    invoke-static {}, Lcom/android/server/wm/WindowManagerService;->boostPriorityForLockedSection()V
+-
+-    monitor-enter v0
+-
+-    :try_start_0
+-    invoke-static {}, Lcom/android/server/wm/WindowManagerService;->traceAfterWmsLock()V
+-
+-    iget-object p0, p0, Lcom/android/server/wm/WindowManagerService;->mRoot:Lcom/android/server/wm/RootWindowContainer;
+-
+-    invoke-virtual {p0, p1}, Lcom/android/server/wm/RootWindowContainer;->getDisplayContent(I)Lcom/android/server/wm/DisplayContent;
+-
+-    move-result-object p0
+-
+-    if-nez p0, :cond_0
+-
+-    new-instance p0, Ljava/util/ArrayList;
+-
+-    invoke-direct {p0}, Ljava/util/ArrayList;-><init>()V
+-
+-    monitor-exit v0
+-    :try_end_0
+-    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+-
+-    invoke-static {}, Lcom/android/server/wm/WindowManagerService;->resetPriorityAfterLockedSection()V
+-
+-    invoke-static {}, Lcom/android/server/wm/WindowManagerService;->traceAfterWmsUnlock()V
+-
+-    return-object p0
+-
+-    :catchall_0
+-    move-exception p0
+-
+-    goto :goto_0
+-
+-    :cond_0
+-    :try_start_1
+-    new-instance p1, Landroid/util/ArraySet;
+-
+-    invoke-direct {p1}, Landroid/util/ArraySet;-><init>()V
+-
+-    new-instance v1, Lcom/android/server/wm/WindowManagerService$$ExternalSyntheticLambda8;
+-
+-    const/4 v3, 0x4
+-
+-    invoke-direct {v1, v3}, Lcom/android/server/wm/WindowManagerService$$ExternalSyntheticLambda8;-><init>(I)V
+-
+-    iput-object p1, v1, Lcom/android/server/wm/WindowManagerService$$ExternalSyntheticLambda8;->f$0:Ljava/lang/Object;
+-
+-    invoke-static {}, Ljava/lang/invoke/VarHandle;->storeStoreFence()V
+-
+-    invoke-virtual {p0, v1, v2}, Lcom/android/server/wm/DisplayArea;->forAllActivities(Ljava/util/function/Consumer;Z)V
++    .locals 0
+ 
+-    invoke-static {p1}, Ljava/util/List;->copyOf(Ljava/util/Collection;)Ljava/util/List;
++    invoke-static {}, Ljava/util/Collections;->emptyList()Ljava/util/List;
+ 
+     move-result-object p0
+ 
+-    monitor-exit v0
+-    :try_end_1
+-    .catchall {:try_start_1 .. :try_end_1} :catchall_0
+-
+-    invoke-static {}, Lcom/android/server/wm/WindowManagerService;->resetPriorityAfterLockedSection()V
+-
+-    invoke-static {}, Lcom/android/server/wm/WindowManagerService;->traceAfterWmsUnlock()V
+-
+-    return-object p0
+-
+-    :goto_0
+-    :try_start_2
+-    monitor-exit v0
+-    :try_end_2
+-    .catchall {:try_start_2 .. :try_end_2} :catchall_0
+-
+-    invoke-static {}, Lcom/android/server/wm/WindowManagerService;->resetPriorityAfterLockedSection()V
+-
+-    invoke-static {}, Lcom/android/server/wm/WindowManagerService;->traceAfterWmsUnlock()V
+-
+-    throw p0
+-
+-    :cond_1
+-    const-string/jumbo p0, "Requires STATUS_BAR_SERVICE permission"
+-
+-    invoke-static {p0}, Lcom/android/server/wm/Task$$ExternalSyntheticBUOutline0;->m(Ljava/lang/String;)V
+-
+-    const/4 p0, 0x0
+-
+     return-object p0
+ .end method
+ 
+@@ -32354,6 +32249,10 @@
+ 
+     invoke-virtual {p0}, Landroid/view/IWindowManager$Stub;->registerScreenRecordingCallback_enforcePermission()V
+ 
++    const/4 p0, 0x0
++
++    return p0
++
+     iget-object p0, p0, Lcom/android/server/wm/WindowManagerService;->mScreenRecordingCallbackController:Lcom/android/server/wm/ScreenRecordingCallbackController;
+ 
+     iget-object v0, p0, Lcom/android/server/wm/ScreenRecordingCallbackController;->mWms:Lcom/android/server/wm/WindowManagerService;
+diff --git a/smali_classes2/com/android/server/wm/WindowState.smali b/smali_classes2/com/android/server/wm/WindowState.smali
+index e389d89c..7f20dd0a 100644
+--- a/smali_classes2/com/android/server/wm/WindowState.smali
++++ b/smali_classes2/com/android/server/wm/WindowState.smali
+@@ -12496,139 +12496,9 @@
+ .end method
+ 
+ .method public final isSecureLocked()Z
+-    .locals 6
+-
+-    iget-object v0, p0, Lcom/android/server/wm/WindowContainer;->mWmService:Lcom/android/server/wm/WindowManagerService;
+-
+-    iget-boolean v0, v0, Lcom/android/server/wm/WindowManagerService;->mDisableSecureWindows:Z
+-
+-    const/4 v1, 0x0
+-
+-    if-eqz v0, :cond_0
+-
+-    return v1
+-
+-    :cond_0
+-    iget-object v0, p0, Lcom/android/server/wm/WindowState;->mAttrs:Landroid/view/WindowManager$LayoutParams;
+-
+-    iget v0, v0, Landroid/view/WindowManager$LayoutParams;->flags:I
+-
+-    and-int/lit16 v0, v0, 0x2000
+-
+-    const/4 v2, 0x1
+-
+-    if-eqz v0, :cond_1
+-
+-    return v2
+-
+-    :cond_1
+-    const-string/jumbo v0, "Screen Capture is disabled by mdm for user("
+-
+-    :try_start_0
+-    iget-object v3, p0, Lcom/android/server/wm/WindowState;->mRestrictionPolicy:Lcom/samsung/android/knox/localservice/RestrictionPolicyInternal;
+-
+-    if-nez v3, :cond_2
+-
+-    const-class v3, Lcom/samsung/android/knox/localservice/RestrictionPolicyInternal;
+-
+-    invoke-static {v3}, Lcom/android/server/LocalServices;->getService(Ljava/lang/Class;)Ljava/lang/Object;
+-
+-    move-result-object v3
+-
+-    check-cast v3, Lcom/samsung/android/knox/localservice/RestrictionPolicyInternal;
+-
+-    iput-object v3, p0, Lcom/android/server/wm/WindowState;->mRestrictionPolicy:Lcom/samsung/android/knox/localservice/RestrictionPolicyInternal;
+-
+-    :cond_2
+-    iget-object v3, p0, Lcom/android/server/wm/WindowState;->mRestrictionPolicy:Lcom/samsung/android/knox/localservice/RestrictionPolicyInternal;
+-
+-    iput-object v3, p0, Lcom/android/server/wm/WindowState;->mRestrictionPolicy:Lcom/samsung/android/knox/localservice/RestrictionPolicyInternal;
+-
+-    if-eqz v3, :cond_3
+-
+-    iget v4, p0, Lcom/android/server/wm/WindowState;->mShowUserId:I
+-
+-    invoke-virtual {v3, v4, v1}, Lcom/samsung/android/knox/localservice/RestrictionPolicyInternal;->isScreenCaptureEnabledEx(IZ)Z
+-
+-    move-result v3
+-
+-    if-nez v3, :cond_3
+-
+-    const-string/jumbo v3, "WindowManager"
+-
+-    new-instance v4, Ljava/lang/StringBuilder;
+-
+-    invoke-direct {v4, v0}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+-
+-    iget v0, p0, Lcom/android/server/wm/WindowState;->mShowUserId:I
+-
+-    invoke-virtual {v4, v0}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+-
+-    const-string v0, ")"
+-
+-    invoke-virtual {v4, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {v4}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+-
+-    move-result-object v0
+-
+-    invoke-static {v3, v0}, Landroid/util/Slog;->d(Ljava/lang/String;Ljava/lang/String;)I
+-    :try_end_0
+-    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
+-
+-    return v2
+-
+-    :catch_0
+-    move-exception v0
+-
+-    invoke-virtual {v0}, Ljava/lang/Exception;->printStackTrace()V
+-
+-    :cond_3
+-    iget-object v0, p0, Lcom/android/server/wm/WindowContainer;->mWmService:Lcom/android/server/wm/WindowManagerService;
+-
+-    iget-object v0, v0, Lcom/android/server/wm/WindowManagerService;->mSensitiveContentPackages:Lcom/android/server/wm/SensitiveContentPackages;
+-
+-    iget-object v3, p0, Lcom/android/server/wm/WindowState;->mAttrs:Landroid/view/WindowManager$LayoutParams;
+-
+-    iget-object v3, v3, Landroid/view/WindowManager$LayoutParams;->packageName:Ljava/lang/String;
+-
+-    iget v4, p0, Lcom/android/server/wm/WindowState;->mOwnerUid:I
+-
+-    iget-object v5, p0, Lcom/android/server/wm/WindowState;->mClient:Landroid/view/IWindow;
+-
+-    invoke-interface {v5}, Landroid/view/IWindow;->asBinder()Landroid/os/IBinder;
+-
+-    move-result-object v5
+-
+-    invoke-virtual {v0, v4, v5, v3}, Lcom/android/server/wm/SensitiveContentPackages;->shouldBlockScreenCaptureForApp(ILandroid/os/IBinder;Ljava/lang/String;)Z
+-
+-    move-result v0
+-
+-    if-eqz v0, :cond_4
+-
+-    return v2
+-
+-    :cond_4
+-    invoke-static {}, Landroid/app/admin/DevicePolicyCache;->getInstance()Landroid/app/admin/DevicePolicyCache;
+-
+-    move-result-object v0
+-
+-    if-nez v0, :cond_5
+-
+-    return v1
+-
+-    :cond_5
+-    invoke-static {}, Landroid/app/admin/DevicePolicyCache;->getInstance()Landroid/app/admin/DevicePolicyCache;
+-
+-    move-result-object v0
+-
+-    iget p0, p0, Lcom/android/server/wm/WindowState;->mShowUserId:I
+-
+-    invoke-virtual {v0, p0}, Landroid/app/admin/DevicePolicyCache;->isScreenCaptureAllowed(I)Z
+-
+-    move-result p0
++    .locals 0
+ 
+-    xor-int/2addr p0, v2
++    const/4 p0, 0x0
+ 
+     return p0
+ .end method
+diff --git a/smali_classes2/com/samsung/android/hardware/display/SemMdnieManagerService.smali b/smali_classes2/com/samsung/android/hardware/display/SemMdnieManagerService.smali
+index d6364ab4..adfa13fd 100644
+--- a/smali_classes2/com/samsung/android/hardware/display/SemMdnieManagerService.smali
++++ b/smali_classes2/com/samsung/android/hardware/display/SemMdnieManagerService.smali
+@@ -181,7 +181,7 @@
+ 
+     iput-object v3, v0, Lcom/samsung/android/hardware/display/SemMdnieManagerService;->afterimageCompensation:Lcom/samsung/android/hardware/display/AfterimageCompensationService;
+ 
+-    const-string v4, "37905"
++    const-string v4, "0"
+ 
+     invoke-static {v4}, Ljava/lang/Integer;->valueOf(Ljava/lang/String;)Ljava/lang/Integer;
+ 
+diff --git a/smali_classes2/com/samsung/android/knoxguard/service/KnoxGuardSeService.smali b/smali_classes2/com/samsung/android/knoxguard/service/KnoxGuardSeService.smali
+index 899ef8a8..d7ff0278 100644
+--- a/smali_classes2/com/samsung/android/knoxguard/service/KnoxGuardSeService.smali
++++ b/smali_classes2/com/samsung/android/knoxguard/service/KnoxGuardSeService.smali
+@@ -147,37 +147,21 @@
+ .end method
+ 
+ .method public constructor <init>(Landroid/content/Context;)V
+-    .locals 1
++    .locals 0
+ 
+     invoke-direct {p0}, Lcom/samsung/android/knoxguard/IKnoxGuardManager$Stub;-><init>()V
+ 
+-    const/4 v0, 0x0
+-
+-    iput-object v0, p0, Lcom/samsung/android/knoxguard/service/KnoxGuardSeService;->mConnectivityManagerService:Landroid/net/ConnectivityManager;
+-
+-    sput-object p1, Lcom/samsung/android/knoxguard/service/KnoxGuardSeService;->mContext:Landroid/content/Context;
+-
+-    invoke-static {}, Lcom/samsung/android/knoxguard/service/utils/Utils;->getStateAndSetToKGSystemProperty()I
+-
+-    move-result p1
+-
+-    sget-object v0, Lcom/samsung/android/knoxguard/service/KnoxGuardSeService;->mContext:Landroid/content/Context;
+-
+-    invoke-virtual {p0, v0}, Lcom/samsung/android/knoxguard/service/KnoxGuardSeService;->registerReceiver(Landroid/content/Context;)V
+-
+-    sget-object v0, Lcom/samsung/android/knoxguard/service/KnoxGuardSeService;->mContext:Landroid/content/Context;
+-
+-    invoke-virtual {p0, v0, p1}, Lcom/samsung/android/knoxguard/service/KnoxGuardSeService;->registerAlarmReceiver(Landroid/content/Context;I)V
++    const/4 p1, 0x0
+ 
+-    invoke-static {p1}, Lcom/samsung/android/knoxguard/service/KnoxGuardSeService;->registerUserPresentReceiverIfLocked(I)V
++    iput-object p1, p0, Lcom/samsung/android/knoxguard/service/KnoxGuardSeService;->mConnectivityManagerService:Landroid/net/ConnectivityManager;
+ 
+-    sget-object p0, Lcom/samsung/android/knoxguard/service/KnoxGuardSeService;->mContext:Landroid/content/Context;
++    new-instance p0, Ljava/lang/UnsupportedOperationException;
+ 
+-    sget-object v0, Lcom/samsung/android/knoxguard/service/KnoxGuardSeService;->opListener:Landroid/app/AppOpsManager$OnOpChangedInternalListener;
++    const-string p1, "KnoxGuard is unsupported"
+ 
+-    invoke-static {p0, p1, v0}, Lcom/samsung/android/knoxguard/service/utils/IntegritySeUtil;->setInitialState(Landroid/content/Context;ILandroid/app/AppOpsManager$OnOpChangedInternalListener;)V
++    invoke-direct {p0, p1}, Ljava/lang/UnsupportedOperationException;-><init>(Ljava/lang/String;)V
+ 
+-    return-void
++    throw p0
+ .end method
+ 
+ .method public static bindAndSetToLockScreen()V
+diff --git a/smali_classes2/com/samsung/android/security/keystore/AttestationUtils.smali b/smali_classes2/com/samsung/android/security/keystore/AttestationUtils.smali
+index 9d1c1fb4..2868825c 100644
+--- a/smali_classes2/com/samsung/android/security/keystore/AttestationUtils.smali
++++ b/smali_classes2/com/samsung/android/security/keystore/AttestationUtils.smali
+@@ -362,7 +362,7 @@
+ 
+     invoke-virtual {v1, v0}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+ 
+-    iget-boolean v0, p1, Lcom/samsung/android/security/keystore/AttestParameterSpec;->mVerifiableIntegrity:Z
++    const/4 v0, 0x0
+ 
+     const-string v3, "AttestationUtils"
+ 

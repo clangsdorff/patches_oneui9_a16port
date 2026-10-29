@@ -1,0 +1,13 @@
+diff --git a/smali/com/samsung/android/knox/integrity/EnhancedAttestationPolicy.smali b/smali/com/samsung/android/knox/integrity/EnhancedAttestationPolicy.smali
+index 698ec59..137001f 100644
+--- a/smali/com/samsung/android/knox/integrity/EnhancedAttestationPolicy.smali
++++ b/smali/com/samsung/android/knox/integrity/EnhancedAttestationPolicy.smali
+@@ -609,7 +609,7 @@
+ .method public isBldpEventSupported()Z
+     .locals 0
+ 
+-    const/4 p0, 0x1
++    const/4 p0, 0x0
+ 
+     return p0
+ .end method

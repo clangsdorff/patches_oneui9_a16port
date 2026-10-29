@@ -1,0 +1,169 @@
+diff --git a/smali_classes3/com/samsung/android/knox/integrity/EnhancedAttestationPolicy.smali b/smali_classes3/com/samsung/android/knox/integrity/EnhancedAttestationPolicy.smali
+index af641206..25a98604 100644
+--- a/smali_classes3/com/samsung/android/knox/integrity/EnhancedAttestationPolicy.smali
++++ b/smali_classes3/com/samsung/android/knox/integrity/EnhancedAttestationPolicy.smali
+@@ -599,7 +599,7 @@
+ .method public isBldpEventSupported()Z
+     .locals 0
+ 
+-    const/4 p0, 0x1
++    const/4 p0, 0x0
+ 
+     return p0
+ .end method
+diff --git a/smali_classes3/com/samsung/android/settings/Rune.smali b/smali_classes3/com/samsung/android/settings/Rune.smali
+index 0071fe90..461fdd56 100644
+--- a/smali_classes3/com/samsung/android/settings/Rune.smali
++++ b/smali_classes3/com/samsung/android/settings/Rune.smali
+@@ -3681,23 +3681,6 @@
+ .method public static supportHighRefreshRate(Landroid/content/Context;I)Z
+     .locals 0
+ 
+-    invoke-static {p1}, Lcom/samsung/android/settings/display/SecDisplayUtils;->getHighRefreshRateSeamlessType(I)I
+-
+-    move-result p1
+-
+-    if-eqz p1, :cond_0
+-
+-    invoke-static {p0}, Lcom/android/settings/Utils;->isDesktopWindowing(Landroid/content/Context;)Z
+-
+-    move-result p0
+-
+-    if-nez p0, :cond_0
+-
+-    const/4 p0, 0x1
+-
+-    return p0
+-
+-    :cond_0
+     const/4 p0, 0x0
+ 
+     return p0
+diff --git a/smali_classes3/com/samsung/android/settings/deviceinfo/aboutphone/ModelNameGetter.smali b/smali_classes3/com/samsung/android/settings/deviceinfo/aboutphone/ModelNameGetter.smali
+index e9088f1a..961c70de 100644
+--- a/smali_classes3/com/samsung/android/settings/deviceinfo/aboutphone/ModelNameGetter.smali
++++ b/smali_classes3/com/samsung/android/settings/deviceinfo/aboutphone/ModelNameGetter.smali
+@@ -48,7 +48,7 @@
+ 
+     invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
+ 
+-    const-string v3, "ro.product.model"
++    const-string v3, "ro.boot.em.model"
+ 
+     invoke-static {v3}, Landroid/os/SystemProperties;->get(Ljava/lang/String;)Ljava/lang/String;
+ 
+diff --git a/smali_classes3/com/samsung/android/settings/deviceinfo/softwareinfo/OneUIVersionPreferenceController.smali b/smali_classes3/com/samsung/android/settings/deviceinfo/softwareinfo/OneUIVersionPreferenceController.smali
+index fab0168c..808456da 100644
+--- a/smali_classes3/com/samsung/android/settings/deviceinfo/softwareinfo/OneUIVersionPreferenceController.smali
++++ b/smali_classes3/com/samsung/android/settings/deviceinfo/softwareinfo/OneUIVersionPreferenceController.smali
+@@ -299,9 +299,7 @@
+ .method public isDeviceWithMicroVersion()Z
+     .locals 0
+ 
+-    invoke-static {}, Lcom/android/settings/Utils;->isTablet()Z
+-
+-    move-result p0
++    const/4 p0, 0x1
+ 
+     return p0
+ .end method
+diff --git a/smali_classes3/com/samsung/android/settings/display/controller/SecOutDoorModePreferenceController.smali b/smali_classes3/com/samsung/android/settings/display/controller/SecOutDoorModePreferenceController.smali
+index 08d4799d..4ad34eec 100644
+--- a/smali_classes3/com/samsung/android/settings/display/controller/SecOutDoorModePreferenceController.smali
++++ b/smali_classes3/com/samsung/android/settings/display/controller/SecOutDoorModePreferenceController.smali
+@@ -78,13 +78,7 @@
+ .method public final isAvailable()Z
+     .locals 0
+ 
+-    iget-object p0, p0, Lcom/android/settingslib/core/AbstractPreferenceController;->mContext:Landroid/content/Context;
+-
+-    invoke-static {p0}, Lcom/samsung/android/settings/Rune;->supportAutoBrightness(Landroid/content/Context;)Z
+-
+-    move-result p0
+-
+-    xor-int/lit8 p0, p0, 0x1
++    const/4 p0, 0x1
+ 
+     return p0
+ .end method
+diff --git a/smali_classes3/com/samsung/android/settings/eyecomfort/EyeComfortSeekBarPreference.smali b/smali_classes3/com/samsung/android/settings/eyecomfort/EyeComfortSeekBarPreference.smali
+index 27d6aac4..431eb79b 100644
+--- a/smali_classes3/com/samsung/android/settings/eyecomfort/EyeComfortSeekBarPreference.smali
++++ b/smali_classes3/com/samsung/android/settings/eyecomfort/EyeComfortSeekBarPreference.smali
+@@ -250,18 +250,28 @@
+ 
+     if-eqz p3, :cond_2
+ 
+-    const-string p3, "mDNIe"
++    const-string p3, "statusbar"
+ 
+-    invoke-virtual {v0, p3}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
++    invoke-static {p3}, Landroid/os/ServiceManager;->checkService(Ljava/lang/String;)Landroid/os/IBinder;
+ 
+     move-result-object p3
+ 
+-    check-cast p3, Lcom/samsung/android/hardware/display/SemMdnieManager;
++    invoke-static {p3}, Lcom/android/internal/statusbar/IStatusBarService$Stub;->asInterface(Landroid/os/IBinder;)Lcom/android/internal/statusbar/IStatusBarService;
++
++    move-result-object p3
++
++    if-eqz p3, :goto_1
+ 
+     const/4 v0, 0x1
+ 
+-    invoke-virtual {p3, v0, p2}, Lcom/samsung/android/hardware/display/SemMdnieManager;->setNightMode(ZI)Z
++    :try_start_blf
++    invoke-interface {p3, v0, p2}, Lcom/android/internal/statusbar/IStatusBarService;->setBlueLightFilter(ZI)V
++    :try_end_blf
++    .catch Landroid/os/RemoteException; {:try_start_blf .. :try_end_blf} :catch_blf
++
++    goto :goto_1
+ 
++    :catch_blf
+     goto :goto_1
+ 
+     :cond_2
+@@ -472,15 +482,24 @@
+ 
+     iget-object p1, p0, Lcom/samsung/android/settings/eyecomfort/EyeComfortSeekBarPreference;->mContext:Landroid/content/Context;
+ 
+-    const-string v1, "mDNIe"
++    const-string p1, "statusbar"
+ 
+-    invoke-virtual {p1, v1}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
++    invoke-static {p1}, Landroid/os/ServiceManager;->checkService(Ljava/lang/String;)Landroid/os/IBinder;
+ 
+     move-result-object p1
+ 
+-    check-cast p1, Lcom/samsung/android/hardware/display/SemMdnieManager;
++    invoke-static {p1}, Lcom/android/internal/statusbar/IStatusBarService$Stub;->asInterface(Landroid/os/IBinder;)Lcom/android/internal/statusbar/IStatusBarService;
++
++    move-result-object p1
++
++    if-eqz p1, :cond_blf_skip
++
++    :try_start_blf
++    invoke-interface {p1, v0, v0}, Lcom/android/internal/statusbar/IStatusBarService;->setBlueLightFilter(ZI)V
++    :try_end_blf
++    .catch Landroid/os/RemoteException; {:try_start_blf .. :try_end_blf} :cond_blf_skip
+ 
+-    invoke-virtual {p1, v0, v0}, Lcom/samsung/android/hardware/display/SemMdnieManager;->setNightMode(ZI)Z
++    :cond_blf_skip
+ 
+     iput-boolean v0, p0, Lcom/samsung/android/settings/eyecomfort/EyeComfortSeekBarPreference;->mEnableControlInSetting:Z
+ 
+diff --git a/smali_classes3/com/samsung/android/settings/security/PowerOffLockPreferenceController.smali b/smali_classes3/com/samsung/android/settings/security/PowerOffLockPreferenceController.smali
+index 6235e55b..ea98d594 100644
+--- a/smali_classes3/com/samsung/android/settings/security/PowerOffLockPreferenceController.smali
++++ b/smali_classes3/com/samsung/android/settings/security/PowerOffLockPreferenceController.smali
+@@ -61,9 +61,7 @@
+ 
+     move-result p0
+ 
+-    if-nez p0, :cond_0
+-
+-    goto :goto_0
++    goto :cond_0
+ 
+     :cond_0
+     const/4 p0, 0x0

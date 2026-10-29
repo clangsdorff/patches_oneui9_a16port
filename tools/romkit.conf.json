@@ -1,0 +1,70 @@
+{
+  "lz4": "/opt/local/bin/lz4",
+  "simg2img": "/opt/local/bin/simg2img",
+  "work_dir": "../work",
+  "parts_dir": "../src/parts",
+  "img_dir": "../out",
+  "owner_dir": "../work/ownermap",
+  "tree_dir": "../work/tree",
+  "tree_names": {
+    "system": "system",
+    "product": "product"
+  },
+  "uuids": {
+    "system": "15351abc-8822-588b-abd8-05a31feeb6d2",
+    "product": "050ceae8-7fa8-5bdf-ae40-1724f74bd572"
+  },
+  "super_group": "group_basic",
+  "super_group_size": 7713325056,
+  "super_partitions": [
+    "system",
+    "vendor",
+    "product",
+    "odm",
+    "vendor_dlkm",
+    "system_dlkm"
+  ],
+  "zip_rebuild": [
+    "system",
+    "vendor",
+    "product"
+  ],
+  "template_zip": "../work/template50.zip",
+  "updater_script": "updater-script",
+  "out_zip": "../out/a14revive@5.0.zip",
+  "zip_dir_entries": [
+    "META-INF/",
+    "META-INF/com/",
+    "META-INF/com/android/",
+    "META-INF/com/google/",
+    "META-INF/com/google/android/"
+  ],
+  "zip_reuse": [
+    "META-INF/com/google/android/update-binary",
+    "unsparse_super_empty.img",
+    "boot.img",
+    "vendor_boot.img",
+    "vbmeta.img",
+    "up_param.bin",
+    "prism.img",
+    "optics.img",
+    "odm.new.dat",
+    "odm.transfer.list",
+    "odm.patch.dat",
+    "vendor_dlkm.new.dat",
+    "vendor_dlkm.transfer.list",
+    "vendor_dlkm.patch.dat",
+    "system_dlkm.new.dat",
+    "system_dlkm.transfer.list",
+    "system_dlkm.patch.dat"
+  ],
+  "zip_reuse_sizes": {
+    "odm": 880640,
+    "vendor_dlkm": 81920,
+    "system_dlkm": 40960
+  },
+  "zip_extra": {
+    "build_info.txt": "name=a14revive\nversion=a14revive@5.0\ndevice=a14\ndate={date}\ndonor=A166BXXUAEZJ5\n",
+    "META-INF/com/android/metadata": "ota-type=BLOCK\npost-build-incremental=A145FXXS8CZDG\npre-device=a14\n"
+  }
+}

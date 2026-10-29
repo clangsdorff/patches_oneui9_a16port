@@ -1,0 +1,3 @@
+# SSRM / DVFS policy retargeted to the A14 (Exynos 850)
+replace	com/android/server/ssrm/Feature	<clinit>()V	"siop_a16x_s5e8535"	"siop_a14_exynos850"
+replace	com/android/server/ssrm/Feature	<clinit>()V	"dvfs_policy_s5e8825_xx"	"dvfs_policy_s5e3830_xx"

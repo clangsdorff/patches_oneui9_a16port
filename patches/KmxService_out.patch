@@ -1,0 +1,313 @@
+diff --git a/smali_classes2/com/samsung/android/kmxservice/common/util/IntegrityStatus.smali b/smali_classes2/com/samsung/android/kmxservice/common/util/IntegrityStatus.smali
+index e0d0e463..c3fa07bb 100644
+--- a/smali_classes2/com/samsung/android/kmxservice/common/util/IntegrityStatus.smali
++++ b/smali_classes2/com/samsung/android/kmxservice/common/util/IntegrityStatus.smali
+@@ -241,53 +241,9 @@
+ .end method
+ 
+ .method public getStatus()I
+-    .locals 4
+-
+-    iget v0, p0, Lcom/samsung/android/kmxservice/common/util/IntegrityStatus;->mTrustBoot:I
+-
+-    const/4 v1, -0x1
+-
+-    if-ne v0, v1, :cond_0
+-
+-    return v1
+-
+-    :cond_0
+-    const/4 v1, 0x0
+-
+-    const/4 v2, 0x1
+-
+-    if-ne v0, v2, :cond_1
+-
+-    move v0, v2
+-
+-    goto :goto_0
+-
+-    :cond_1
+-    move v0, v1
+-
+-    :goto_0
+-    iget v3, p0, Lcom/samsung/android/kmxservice/common/util/IntegrityStatus;->mWarranty:I
+-
+-    if-ne v3, v2, :cond_2
+-
+-    const/4 v3, 0x2
+-
+-    goto :goto_1
+-
+-    :cond_2
+-    move v3, v1
+-
+-    :goto_1
+-    or-int/2addr v0, v3
+-
+-    iget p0, p0, Lcom/samsung/android/kmxservice/common/util/IntegrityStatus;->mIcd:I
+-
+-    if-ne p0, v2, :cond_3
+-
+-    const/4 v1, 0x4
++    .locals 0
+ 
+-    :cond_3
+-    or-int p0, v0, v1
++    const/4 p0, 0x0
+ 
+     return p0
+ .end method
+@@ -309,39 +265,8 @@
+ .end method
+ 
+ .method public isNormal()Z
+-    .locals 2
+-
+-    iget v0, p0, Lcom/samsung/android/kmxservice/common/util/IntegrityStatus;->mTrustBoot:I
+-
+-    const/4 v1, 0x2
+-
+-    if-eqz v0, :cond_0
+-
+-    if-ne v0, v1, :cond_2
+-
+-    :cond_0
+-    iget v0, p0, Lcom/samsung/android/kmxservice/common/util/IntegrityStatus;->mWarranty:I
+-
+-    if-eqz v0, :cond_1
+-
+-    if-ne v0, v1, :cond_2
+-
+-    :cond_1
+-    iget p0, p0, Lcom/samsung/android/kmxservice/common/util/IntegrityStatus;->mIcd:I
+-
+-    if-eqz p0, :cond_3
+-
+-    if-ne p0, v1, :cond_2
+-
+-    goto :goto_0
+-
+-    :cond_2
+-    const/4 p0, 0x0
+-
+-    return p0
++    .locals 0
+ 
+-    :cond_3
+-    :goto_0
+     const/4 p0, 0x1
+ 
+     return p0
+diff --git a/smali_classes2/com/samsung/android/kmxservice/common/util/RootOfTrust.smali b/smali_classes2/com/samsung/android/kmxservice/common/util/RootOfTrust.smali
+index f9e61ccb..5901c139 100644
+--- a/smali_classes2/com/samsung/android/kmxservice/common/util/RootOfTrust.smali
++++ b/smali_classes2/com/samsung/android/kmxservice/common/util/RootOfTrust.smali
+@@ -243,7 +243,7 @@
+ .method public getVerifiedBootState()I
+     .locals 0
+ 
+-    iget p0, p0, Lcom/samsung/android/kmxservice/common/util/RootOfTrust;->mVerifiedBootState:I
++    const/4 p0, 0x0
+ 
+     return p0
+ .end method
+@@ -251,7 +251,7 @@
+ .method public isDeviceLocked()Z
+     .locals 0
+ 
+-    iget-boolean p0, p0, Lcom/samsung/android/kmxservice/common/util/RootOfTrust;->mDeviceLocked:Z
++    const/4 p0, 0x1
+ 
+     return p0
+ .end method
+diff --git a/smali_classes2/com/samsung/android/kmxservice/fabrickeystore/keystore/cert/IntegrityStatus.smali b/smali_classes2/com/samsung/android/kmxservice/fabrickeystore/keystore/cert/IntegrityStatus.smali
+index 0eef496b..1d1a60b0 100644
+--- a/smali_classes2/com/samsung/android/kmxservice/fabrickeystore/keystore/cert/IntegrityStatus.smali
++++ b/smali_classes2/com/samsung/android/kmxservice/fabrickeystore/keystore/cert/IntegrityStatus.smali
+@@ -184,39 +184,8 @@
+ .end method
+ 
+ .method public isNormal()Z
+-    .locals 2
+-
+-    iget v0, p0, Lcom/samsung/android/kmxservice/fabrickeystore/keystore/cert/IntegrityStatus;->mTrustBoot:I
+-
+-    const/4 v1, 0x2
+-
+-    if-eqz v0, :cond_0
+-
+-    if-ne v0, v1, :cond_2
+-
+-    :cond_0
+-    iget v0, p0, Lcom/samsung/android/kmxservice/fabrickeystore/keystore/cert/IntegrityStatus;->mWarranty:I
+-
+-    if-eqz v0, :cond_1
+-
+-    if-ne v0, v1, :cond_2
+-
+-    :cond_1
+-    iget p0, p0, Lcom/samsung/android/kmxservice/fabrickeystore/keystore/cert/IntegrityStatus;->mIcd:I
+-
+-    if-eqz p0, :cond_3
+-
+-    if-ne p0, v1, :cond_2
+-
+-    goto :goto_0
+-
+-    :cond_2
+-    const/4 p0, 0x0
+-
+-    return p0
++    .locals 0
+ 
+-    :cond_3
+-    :goto_0
+     const/4 p0, 0x1
+ 
+     return p0
+diff --git a/smali_classes2/com/samsung/android/kmxservice/fabrickeystore/keystore/cert/RootOfTrust.smali b/smali_classes2/com/samsung/android/kmxservice/fabrickeystore/keystore/cert/RootOfTrust.smali
+index 648e4448..85992c56 100644
+--- a/smali_classes2/com/samsung/android/kmxservice/fabrickeystore/keystore/cert/RootOfTrust.smali
++++ b/smali_classes2/com/samsung/android/kmxservice/fabrickeystore/keystore/cert/RootOfTrust.smali
+@@ -243,7 +243,7 @@
+ .method public getVerifiedBootState()I
+     .locals 0
+ 
+-    iget p0, p0, Lcom/samsung/android/kmxservice/fabrickeystore/keystore/cert/RootOfTrust;->mVerifiedBootState:I
++    const/4 p0, 0x0
+ 
+     return p0
+ .end method
+@@ -251,7 +251,7 @@
+ .method public isDeviceLocked()Z
+     .locals 0
+ 
+-    iget-boolean p0, p0, Lcom/samsung/android/kmxservice/fabrickeystore/keystore/cert/RootOfTrust;->mDeviceLocked:Z
++    const/4 p0, 0x1
+ 
+     return p0
+ .end method
+diff --git a/smali_classes2/com/samsung/android/kmxservice/sdk/trustchain/util/IntegrityStatus.smali b/smali_classes2/com/samsung/android/kmxservice/sdk/trustchain/util/IntegrityStatus.smali
+index 936914f6..6b8339c7 100644
+--- a/smali_classes2/com/samsung/android/kmxservice/sdk/trustchain/util/IntegrityStatus.smali
++++ b/smali_classes2/com/samsung/android/kmxservice/sdk/trustchain/util/IntegrityStatus.smali
+@@ -189,53 +189,9 @@
+ .end method
+ 
+ .method public getStatus()I
+-    .locals 4
+-
+-    iget v0, p0, Lcom/samsung/android/kmxservice/sdk/trustchain/util/IntegrityStatus;->mTrustBoot:I
+-
+-    const/4 v1, -0x1
+-
+-    if-ne v0, v1, :cond_0
+-
+-    return v1
+-
+-    :cond_0
+-    const/4 v1, 0x0
+-
+-    const/4 v2, 0x1
+-
+-    if-ne v0, v2, :cond_1
+-
+-    move v0, v2
+-
+-    goto :goto_0
+-
+-    :cond_1
+-    move v0, v1
+-
+-    :goto_0
+-    iget v3, p0, Lcom/samsung/android/kmxservice/sdk/trustchain/util/IntegrityStatus;->mWarranty:I
+-
+-    if-ne v3, v2, :cond_2
+-
+-    const/4 v3, 0x2
+-
+-    goto :goto_1
+-
+-    :cond_2
+-    move v3, v1
+-
+-    :goto_1
+-    or-int/2addr v0, v3
+-
+-    iget p0, p0, Lcom/samsung/android/kmxservice/sdk/trustchain/util/IntegrityStatus;->mIcd:I
+-
+-    if-ne p0, v2, :cond_3
+-
+-    const/4 v1, 0x4
++    .locals 0
+ 
+-    :cond_3
+-    or-int p0, v0, v1
++    const/4 p0, 0x0
+ 
+     return p0
+ .end method
+@@ -257,39 +213,8 @@
+ .end method
+ 
+ .method public isNormal()Z
+-    .locals 2
+-
+-    iget v0, p0, Lcom/samsung/android/kmxservice/sdk/trustchain/util/IntegrityStatus;->mTrustBoot:I
+-
+-    const/4 v1, 0x2
+-
+-    if-eqz v0, :cond_0
+-
+-    if-ne v0, v1, :cond_2
+-
+-    :cond_0
+-    iget v0, p0, Lcom/samsung/android/kmxservice/sdk/trustchain/util/IntegrityStatus;->mWarranty:I
+-
+-    if-eqz v0, :cond_1
+-
+-    if-ne v0, v1, :cond_2
+-
+-    :cond_1
+-    iget p0, p0, Lcom/samsung/android/kmxservice/sdk/trustchain/util/IntegrityStatus;->mIcd:I
+-
+-    if-eqz p0, :cond_3
+-
+-    if-ne p0, v1, :cond_2
+-
+-    goto :goto_0
+-
+-    :cond_2
+-    const/4 p0, 0x0
+-
+-    return p0
++    .locals 0
+ 
+-    :cond_3
+-    :goto_0
+     const/4 p0, 0x1
+ 
+     return p0
+diff --git a/smali_classes2/com/samsung/android/kmxservice/sdk/trustchain/util/RootOfTrust.smali b/smali_classes2/com/samsung/android/kmxservice/sdk/trustchain/util/RootOfTrust.smali
+index 0698ed97..539bf763 100644
+--- a/smali_classes2/com/samsung/android/kmxservice/sdk/trustchain/util/RootOfTrust.smali
++++ b/smali_classes2/com/samsung/android/kmxservice/sdk/trustchain/util/RootOfTrust.smali
+@@ -243,7 +243,7 @@
+ .method public getVerifiedBootState()I
+     .locals 0
+ 
+-    iget p0, p0, Lcom/samsung/android/kmxservice/sdk/trustchain/util/RootOfTrust;->mVerifiedBootState:I
++    const/4 p0, 0x0
+ 
+     return p0
+ .end method
+@@ -251,7 +251,7 @@
+ .method public isDeviceLocked()Z
+     .locals 0
+ 
+-    iget-boolean p0, p0, Lcom/samsung/android/kmxservice/sdk/trustchain/util/RootOfTrust;->mDeviceLocked:Z
++    const/4 p0, 0x1
+ 
+     return p0
+ .end method

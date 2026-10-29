@@ -1,0 +1,11 @@
+# Freecess picks per-device policies by model: use the A14 one
+replace	com/android/server/am/FreecessController	<clinit>()V	"ro.product.model"	"ro.product.vendor.model"
+
+# Knox DualDAR / attestation: trust the device, never request verifiable integrity
+return	com/android/server/knox/dar/DarManagerService	checkDeviceIntegrity([Ljava/security/cert/Certificate;)Z	true
+return	com/android/server/knox/dar/DarManagerService	isDeviceRootKeyInstalled()Z	true
+return	com/android/server/knox/dar/DarManagerService	isKnoxKeyInstallable()Z	true
+replace	com/samsung/android/security/keystore/AttestationUtils	attestKey(Lcom/samsung/android/security/keystore/AttestParameterSpec;)Ljava/lang/Iterable;	iget-boolean v0, p1, Lcom/samsung/android/security/keystore/AttestParameterSpec;->mVerifiableIntegrity:Z	const/4 v0, 0x0
+
+# RAM Plus off by default (zram stays at RAM size, no writeback to /data)
+return	com/android/server/NandswapManager	getDefaultRamExpandSize()I	0

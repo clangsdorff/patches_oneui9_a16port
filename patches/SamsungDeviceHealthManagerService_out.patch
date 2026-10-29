@@ -1,0 +1,1238 @@
+diff --git a/assets/siop_a14_exynos850.xml b/assets/siop_a14_exynos850.xml
+new file mode 100644
+index 0000000..d8c5e02
+--- /dev/null
++++ b/assets/siop_a14_exynos850.xml
+@@ -0,0 +1,222 @@
++<?xml version="1.0" encoding="UTF-8"?>
++
++<!DOCTYPE siop_document [
++<!ELEMENT siop_document (temperatures, levels, components, scenarios?)>
++<!ELEMENT temperatures (temp+)>
++<!ELEMENT temp EMPTY>
++<!ATTLIST temp
++          type (AP|BAT|USB|CHG|PA|WIFI) #REQUIRED
++          default CDATA "1"
++          min CDATA "1"
++          max CDATA "1"
++          step CDATA "1"
++          init CDATA "5"
++          hold CDATA "1"
++          gap CDATA "0">
++<!ELEMENT levels (level+)>
++<!ELEMENT level EMPTY>
++<!ATTLIST level
++          id CDATA #REQUIRED
++          temp CDATA #REQUIRED>
++<!ELEMENT components (component+)>
++<!ELEMENT component (limiter+)>
++<!ATTLIST component
++          name CDATA #REQUIRED
++          tempType CDATA #REQUIRED>
++<!ELEMENT scenarios (scenario*, scenario_group*)>
++<!ELEMENT scenario (limiter+)>
++<!-- you can use below delimiter on scenario name -->
++<!-- "!" : intent, ":" : package, "," : plural    -->
++<!ATTLIST scenario
++          name CDATA #REQUIRED
++          tempType CDATA #REQUIRED
++          priority CDATA "0">
++<!ELEMENT scenario_group (scenario+)>
++<!ELEMENT scenario EMPTY>
++<!ATTLIST scenario
++          name CDATA #REQUIRED
++          limiter CDATA #REQUIRED
++          step CDATA "-1"
++          delay CDATA "0"
++          cond (sensor_check|for_request|for_temporary) #IMPLIED
++          temp CDATA "370"
++          gap CDATA "20"
++          value CDATA #REQUIRED>
++<!ELEMENT limiter EMPTY>
++<!ATTLIST limiter
++          name CDATA #REQUIRED
++          step CDATA "-1"
++          delay CDATA "0"
++          cond (sensor_check|for_request|for_temporary) #IMPLIED
++          temp CDATA "370"
++          gap CDATA "20"
++          value CDATA #REQUIRED>
++]>
++
++<siop_document>
++
++    <overheatcontrol>
++        <complex>
++            <LTB    formula="AP*SKIN*PA"     temp="535.480.525" />
++            <LCD    formula="AP*SKIN*PA"     temp="520.460.510" />
++            <GDM    formula="AP*SKIN*PA"     temp="490.440.480" />
++            <GDMLTB formula="AP*SKIN*PA"     temp="520.460.500" />
++            <SS     formula="AP*BAT*PA"      temp="657.444.746" />
++        </complex>
++    </overheatcontrol>
++
++    <modelsettings>
++       <Skin type="LRP2"/>
++        <sensors>
++            <LTB_SENSOR type="LIGHT" />
++        </sensors>
++    </modelsettings>
++
++    <components>
++
++        <component name="AP" tempType="SKIN" >
++            <limiter name="CPUFreqMax" multistage="1" 
++                     temp="380:400:420:450" p="50" i="1" d="30" unit="1000"
++                     load_gap="2:2:2:2"
++                     min_high="2002000:1846000:1742000:1586000"
++                     min="1846000:1742000:1586000:1456000" />
++
++            <limiter name="GPUFreqMax" multistage="1" 
++                     temp="380:400:420:450" p="50" i="1" d="30" unit="400"
++                     min="1001000:865000:754000:377000" />
++        </component>
++
++        <component name="CAM" tempType="SKIN" >
++            <limiter name="CameraAr"            temp="400:420:450:480"             value="-1:1:2:3"       />
++            <limiter name="CameraOverheatLevel" temp="350:370:390:410:430:450:460" value="-1:1:2:3:4:5:6" />
++            <limiter name="DualRecording"       temp="350"                         value="-1:1"           />
++        </component>
++
++        <component name="CHG" tempType="SKIN">
++            <limiter name="Charging" temp="380" value="-1" />
++        </component>
++
++        <component name="CP" tempType="SKIN">
++            <limiter name="CpLowMode" value="-1" />
++        </component>
++
++        <component name="DISPLAY" tempType="SKIN">
++            <limiter name="Brightness"     temp="380:400:420:450:470"    value="-1:160:108:62:43" />
++            <limiter name="LimitHrr"       temp="530"         value="-1:1"                   />
++            <limiter name="AppCastDisable" temp="450:470:500" value="-1:1:1" delay="0:300:0" />
++            <limiter name="MultiWindow"    temp="450:470:500" value="-1:1:1" delay="0:300:0" />
++        </component>
++
++        <component name="WIFI" tempType="SKIN">
++            <limiter name="WifiTput"    tempType="SKIN" temp="450" p="50" i="2" d="50" unit="0.1" min="300" />
++            <limiter name="WifiP2pTput" tempType="SKIN" temp="450" p="50" i="2" d="50" unit="0.1" min="300"/>
++            <limiter name="HotspotTput" tempType="SKIN" temp="450" p="50" i="2" d="50" unit="0.1" min="300"/>
++            <limiter name="SmartBonding"                temp="400" value="-1:1"                            />
++        </component>
++
++        <component name="CHG+DISPLAY" tempType="SKIN">
++            <limiter name="Charging" temp="360" value="-1:80" />
++        </component>
++
++    </components>
++
++    <scenarios>
++        <scenario name="ScreenOff" tempType="SKIN" priority="1" >
++            <limiter name="Charging" value="100" />
++        </scenario>
++
++        <scenario name="TPBoost:com.FTATS,com.fafa" tempType="SKIN" >
++            <limiter name="CPUFreqMax" value="-1" />
++        </scenario>
++
++        <scenario name="SIPStart" tempType="SKIN" priority="1" >
++            <limiter name="CPUFreqMax" cond="for_temporary" value="-1" />
++            <limiter name="GPUFreqMax" cond="for_temporary" value="-1" />
++        </scenario>
++
++        <scenario name="AppStart" tempType="SKIN" priority="1" >
++            <limiter name="CPUFreqMax" cond="for_temporary" value="-1" />
++            <limiter name="GPUFreqMax" cond="for_temporary" value="-1" />
++        </scenario>
++
++        <scenario name="Badge" tempType="SKIN" priority="1" >
++            <limiter name="CPUFreqMax" cond="for_temporary" value="-1" />
++            <limiter name="GPUFreqMax" cond="for_temporary" value="-1" />
++        </scenario>
++
++        <scenario name="CallStart" tempType="SKIN" priority="1" >
++            <limiter name="CPUFreqMax" cond="for_temporary" value="-1" />
++            <limiter name="GPUFreqMax" cond="for_temporary" value="-1" />
++        </scenario>
++
++        <scenario name="WakeUp" tempType="SKIN" priority="1" >
++            <limiter name="CPUFreqMax" cond="for_temporary" value="-1" />
++            <limiter name="GPUFreqMax" cond="for_temporary" value="-1" />
++        </scenario>
++
++        <scenario name="MultiWindow" tempType="SKIN" priority="2" >
++            <limiter name="LimitHrr"            temp="430"     value="-1:1" />
++        </scenario>
++
++        <scenario name="Dex" tempType="SKIN" priority="2" >
++            <limiter name="LimitHrr"        temp="430" value="-1:1" />
++            <limiter name="DynamicFpsLevel" temp="430" value="-1:30"/>
++        </scenario>
++
++        <scenario name="LowTemp" tempType="BAT" priority="3" >
++            <limiter name="CPUFreqMax" value="-1" />
++            <limiter name="Charging"   value="-1" />
++        </scenario>
++
++        <scenario name="SmartSwitchTransfer" tempType="SKIN" priority="2" >
++            <limiter name="Charging"                    temp="300"                     value="-1:70"       />
++            <limiter name="JobRestriction"              temp="340"                     value="1"           />
++            <limiter name="WifiP2pTput" tempType="SKIN" temp="370" p="50" i="2" d="50" unit="0.1" min="300"/> 
++        </scenario>
++
++        <scenario name="SmartSwitchAppInstall" tempType="SKIN" priority="1" >
++            <limiter name="DexOptCpuset"     temp="340" value="-1:1" />
++            <limiter name="Charging"         temp="300"       value="-1:70"   />
++            <limiter name="JobRestriction"   temp="340"       value="1"       />
++        </scenario>
++
++        <scenario name="retailmode:com.samsung.rms.retailagent.global" tempType="SKIN" priority="1">
++            <limiter name="Charging" value="70" />
++        </scenario>
++
++        <scenario name="CameraControl" tempType="SKIN" priority="2" >
++            <limiter name="CameraFps"  temp="320:340:370:390"         value="-1:20:20:15" />
++        </scenario>
++
++        <scenario name="SPA" tempType="SKIN" priority="1" >
++            <limiter name="CPUFreqMax" cond="for_temporary" value="-1" />
++            <limiter name="GPUFreqMax" cond="for_temporary" value="-1" />
++            <limiter name="OverLimit"                       value="-1" />
++        </scenario>
++
++        <scenario name="GameSDK" tempType="SKIN" priority="1" >
++            <limiter name="CPUFreqMax" cond="for_temporary" value="-1" />
++            <limiter name="GPUFreqMax" cond="for_temporary" value="-1" />
++            <limiter name="OverLimit"  value="-1" />
++        </scenario>
++
++        <scenario name="Navigation" tempType="SKIN" priority="1" >
++            <limiter name="Brightness" temp="400:420:450:470" value="158:108:62:43" />
++            <limiter name="CameraFps"  temp="370:390"         value="-1:15" />
++        </scenario>
++
++        <scenario name="SpeedControlForTG" tempType="SKIN" priority="1" >
++            <limiter name="OverLimit"          value="-1"/>
++        </scenario>
++
++        <scenario name="BrightnessControlForTG" tempType="SKIN" priority="1" >
++            <limiter name="Brightness"  temp="340:360:380:400:420:450:470:530:550:600" value="-1:230:210:180:150:120:100:100:70:15" />
++        </scenario>
++
++        <scenario name="HrrControlForTG" tempType="SKIN" priority="1" >
++            <limiter name="LimitHrr" temp="380" value="-1:1" />
++        </scenario>
++
++    </scenarios>
++
++</siop_document>
+diff --git a/assets/siop_default b/assets/siop_default
+deleted file mode 100644
+index 7e57210f94535683e49db33646d2bb473d193b4a..0000000000000000000000000000000000000000
+GIT binary patch
+literal 0
+HcmV?d00001
+
+literal 10192
+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
+KRJc!-x!s%23-%@e
+
+diff --git a/assets/siop_default.xml b/assets/siop_default.xml
+new file mode 100644
+index 0000000..84941c4
+--- /dev/null
++++ b/assets/siop_default.xml
+@@ -0,0 +1,235 @@
++<?xml version="1.0" encoding="UTF-8"?>
++
++<!DOCTYPE siop_document [
++<!ELEMENT siop_document (temperatures, levels, components, scenarios?)>
++<!ELEMENT temperatures (temp+)>
++<!ELEMENT temp EMPTY>
++<!ATTLIST temp
++          type (AP|BAT|USB|CHG|PA|WIFI) #REQUIRED
++          default CDATA "1"
++          min CDATA "1"
++          max CDATA "1"
++          step CDATA "1"
++          init CDATA "5"
++          hold CDATA "1"
++          gap CDATA "0">
++<!ELEMENT levels (level+)>
++<!ELEMENT level EMPTY>
++<!ATTLIST level
++          id CDATA #REQUIRED
++          temp CDATA #REQUIRED>
++<!ELEMENT components (component+)>
++<!ELEMENT component (limiter+)>
++<!ATTLIST component
++          name CDATA #REQUIRED
++          tempType CDATA #REQUIRED>
++<!ELEMENT scenarios (scenario*, scenario_group*)>
++<!ELEMENT scenario (limiter+)>
++<!-- you can use below delimiter on scenario name -->
++<!-- "!" : intent, ":" : package, "," : plural    -->
++<!ATTLIST scenario
++          name CDATA #REQUIRED
++          tempType CDATA #REQUIRED
++          priority CDATA "0">
++<!ELEMENT scenario_group (scenario+)>
++<!ELEMENT scenario EMPTY>
++<!ATTLIST scenario
++          name CDATA #REQUIRED
++          limiter CDATA #REQUIRED
++          step CDATA "-1"
++          delay CDATA "0"
++          cond (sensor_check|for_request|for_temporary) #IMPLIED
++          temp CDATA "370"
++          gap CDATA "20"
++          value CDATA #REQUIRED>
++<!ELEMENT limiter EMPTY>
++<!ATTLIST limiter
++          name CDATA #REQUIRED
++          step CDATA "-1"
++          delay CDATA "0"
++          cond (sensor_check|for_request|for_temporary) #IMPLIED
++          temp CDATA "370"
++          gap CDATA "20"
++          value CDATA #REQUIRED>
++]>
++
++<siop_document>
++
++    <overheatcontrol>
++        <complex>
++        </complex>
++    </overheatcontrol>
++    <modelsettings>
++        <temperatures>
++            <temp type="AP"   default="15" min="15" max="15" step="0" gap="100" />
++            <temp type="BAT"  default="1"  min="1"  max="1"  step="0" gap="0" />
++            <temp type="USB"  default="1"  min="1"  max="1"  step="0" gap="0" />
++            <temp type="CHG"  default="1"  min="1"  max="1"  step="0" gap="0" />
++            <temp type="PA"   default="1"  min="1"  max="1"  step="0" gap="0" />
++            <temp type="WIFI" default="1"  min="1"  max="1"  step="0" gap="0" />
++        </temperatures>
++        <levels tempType="SKIN" >
++            <level id="-3" temp="300" />
++            <level id="-2" temp="320" />
++            <level id="-1" temp="340" />
++            <level id="0"  temp="360" />
++            <level id="1"  temp="380" />
++            <level id="2"  temp="400" />
++            <level id="3"  temp="420" />
++            <level id="4"  temp="440" />
++            <level id="5"  temp="460" />
++            <level id="6"  temp="480" />
++            <level id="7"  temp="500" />
++            <level id="8"  temp="520" />
++        </levels>
++    </modelsettings>
++
++    <components>
++
++        <component name="AP" tempType="SKIN" >
++            <limiter name="CPUFreqMax" step="1" temp="380"             value="-1"                   />
++            <limiter name="GPUFreqMax" step="1" temp="380"             value="-1"                   />
++            <limiter name="AppInstallDelay"     temp="400:420"         value="-1:10000"             />
++            <limiter name="DexOptCpuset"        temp="360"             value="-1:1"                 />
++            <limiter name="BackgroundCpuset"    temp="360"             value="-1:100:200:300"       />
++            <limiter name="TABoost"             temp="400"             value="-1:1"                 />
++        </component>
++
++        <component name="CAM" tempType="SKIN" >
++            <limiter name="CameraAr"            temp="400:420:450:480"             value="-1:1:2:3"       />
++            <limiter name="CameraOverheatLevel" temp="350:370:390:410:430:450:460" value="-1:1:2:3:4:5:6" />
++            <limiter name="DualRecording"       temp="350"                         value="-1:1"           />
++        </component>
++
++        <component name="CHG" tempType="SKIN">
++            <limiter name="Charging" temp="380" value="-1" />
++        </component>
++
++        <component name="CP" tempType="SKIN">
++            <limiter name="CpLowMode" value="-1" />
++        </component>
++
++        <component name="DISPLAY" tempType="SKIN">
++            <limiter name="Brightness"     temp="380"         value="-1"                     />
++            <limiter name="LimitHrr"       temp="530"         value="-1:1"                   />
++            <limiter name="AppCastDisable" temp="450:470:500" value="-1:1:1" delay="0:300:0" />
++            <limiter name="MultiWindow"    temp="450:470:500" value="-1:1:1" delay="0:300:0" />
++        </component>
++
++        <component name="WIFI" tempType="SKIN">
++            <limiter name="WifiTput"    tempType="SKIN" temp="450" p="50" i="2" d="50" unit="0.1" min="300" />
++            <limiter name="WifiP2pTput" tempType="SKIN" temp="450" p="50" i="2" d="50" unit="0.1" min="300"/>
++            <limiter name="WifiAwareTput" tempType="SKIN" temp="450" p="50" i="2" d="50" unit="0.1" min="300"/>
++            <limiter name="HotspotTput" tempType="SKIN" temp="450" p="50" i="2" d="50" unit="0.1" min="300"/>
++            <limiter name="SmartBonding"                temp="400" value="-1:1"                            />
++        </component>
++
++        <component name="CHG+DISPLAY" tempType="SKIN">
++            <limiter name="Charging" temp="360" value="-1:80" />
++        </component>
++
++    </components>
++
++    <scenarios>
++        <scenario name="ScreenOff" tempType="SKIN" priority="1" >
++            <limiter name="Charging" value="100" />
++        </scenario>
++
++        <scenario name="TPBoost:com.FTATS,com.fafa" tempType="SKIN" >
++            <limiter name="CPUFreqMax" value="-1" />
++        </scenario>
++
++        <scenario name="SIPStart" tempType="SKIN" priority="1" >
++            <limiter name="CPUFreqMax" cond="for_temporary" value="-1" />
++            <limiter name="GPUFreqMax" cond="for_temporary" value="-1" />
++        </scenario>
++
++        <scenario name="AppStart" tempType="SKIN" priority="1" >
++            <limiter name="CPUFreqMax" cond="for_temporary" value="-1" />
++            <limiter name="GPUFreqMax" cond="for_temporary" value="-1" />
++        </scenario>
++
++        <scenario name="Badge" tempType="SKIN" priority="1" >
++            <limiter name="CPUFreqMax" cond="for_temporary" value="-1" />
++            <limiter name="GPUFreqMax" cond="for_temporary" value="-1" />
++        </scenario>
++
++        <scenario name="CallStart" tempType="SKIN" priority="1" >
++            <limiter name="CPUFreqMax" cond="for_temporary" value="-1" />
++            <limiter name="GPUFreqMax" cond="for_temporary" value="-1" />
++        </scenario>
++
++        <scenario name="WakeUp" tempType="SKIN" priority="1" >
++            <limiter name="CPUFreqMax" cond="for_temporary" value="-1" />
++            <limiter name="GPUFreqMax" cond="for_temporary" value="-1" />
++        </scenario>
++
++        <scenario name="MultiWindow" tempType="SKIN" priority="2" >
++            <limiter name="LimitHrr"            temp="430"     value="-1:1" />
++        </scenario>
++
++        <scenario name="Navigation" tempType="SKIN" priority="1" >
++            <limiter name="CameraFps"       temp="360:380:420:450" value="-1:24:24:15" />
++        </scenario>
++
++        <scenario name="Dex" tempType="SKIN" priority="2" >
++            <limiter name="LimitHrr"        temp="430" value="-1:1" />
++            <limiter name="DynamicFpsLevel" temp="430" value="-1:30"/>
++        </scenario>
++
++        <scenario name="LowTemp" tempType="BAT" priority="3" >
++            <limiter name="CPUFreqMax" value="-1" />
++            <limiter name="Charging"   value="-1" />
++        </scenario>
++
++        <scenario name="SmartSwitchTransfer" tempType="SKIN" priority="2" >
++            <limiter name="Charging"                    temp="300"                     value="-1:70"       />
++            <limiter name="JobRestriction"              temp="340"                     value="1"           />
++            <limiter name="WifiTput"                    temp="380" p="50" i="2" d="50" unit="0.1" min="400"/>
++            <limiter name="WifiP2pTput"                 temp="380" p="50" i="2" d="50" unit="0.1" min="400"/>
++        </scenario>
++
++        <scenario name="SmartSwitchAppInstall" tempType="SKIN" priority="1" >
++            <limiter name="Charging"         temp="300"                      value="-1:70" />
++            <limiter name="JobRestriction"   temp="340"                      value="1" />
++        </scenario>
++
++        <scenario name="retailmode:com.samsung.rms.retailagent.global" tempType="SKIN" priority="1">
++            <limiter name="Charging" value="70" />
++        </scenario>
++
++        <scenario name="scrrensaver:com.samsung.android.retail.screensaver" tempType="SKIN" priority="1">
++            <limiter name="Charging" value="70" />
++        </scenario>
++
++        <scenario name="SPA" tempType="SKIN" priority="3" >
++            <limiter name="CPUFreqMax" cond="for_temporary" value="-1" />
++            <limiter name="GPUFreqMax" cond="for_temporary" value="-1" />
++            <limiter name="OverLimit"                       value="-1" />
++        </scenario>
++
++        <scenario name="GameSDK" tempType="SKIN" priority="1" >
++            <limiter name="CPUFreqMax" cond="for_temporary" value="-1" />
++            <limiter name="GPUFreqMax" cond="for_temporary" value="-1" />
++            <limiter name="OverLimit"  value="-1" />
++        </scenario>
++
++        <scenario name="SpeedControlForTG" tempType="SKIN" priority="1" >
++            <limiter name="OverLimit"          value="-1"/>
++        </scenario>
++
++        <scenario name="BrightnessControlForTG" tempType="SKIN" priority="1" >
++            <limiter name="Brightness"  temp="340:360:380:400:420:450:470:530:550:600" value="-1:230:210:180:150:120:100:100:70:15" />
++        </scenario>
++
++        <scenario name="HrrControlForTG" tempType="SKIN" priority="1" >
++            <limiter name="LimitHrr" temp="380" value="-1:1" />
++        </scenario>
++
++        <scenario name="LrrControlForTG" tempType="SKIN" priority="1" >
++            <limiter name="LimitHrr" temp="380" value="1" />
++        </scenario>
++
++    </scenarios>
++
++</siop_document>
+\ No newline at end of file
+diff --git a/assets/siop_model b/assets/siop_model
+deleted file mode 100644
+index 2b9e821fddbf5052c7f1a727f55b7dfccb025435..0000000000000000000000000000000000000000
+GIT binary patch
+literal 0
+HcmV?d00001
+
+literal 6576
+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
+
+diff --git a/assets/ssrm_default b/assets/ssrm_default
+deleted file mode 100644
+index 78ee60f8fb2b83ee4a0eb2f3cad0e420f48dde33..0000000000000000000000000000000000000000
+GIT binary patch
+literal 0
+HcmV?d00001
+
+literal 7056
+zcmV;B8*k*D;M<kYIJ@>#&V$zhJ$MIxJ<Z{>c>Esy-W}@>+53bjYD@f8EQGK(vophh
+zK%EK`hI$Y6xI!w^x>bMXI2HLXk=ynY<G6!!1B7N^=pX)AVki3)FRJ_oItsPbiO&<O
+z8DFX5u~hq)Ir=d6cx={jz^e_7{Eol4c9bNuUehn&GH3v`0sO$vyp?}nNnppi;6HnY
+zVk)+xJmt;rC1Hl(J-sG*$pDmRHeC{3b$m$~c~be=BfTxCM>^@20sMbf%F7=s73|ic
+zOIr+bal_p_0>B5XTwehqALTMKi=ZA(r-)(J@lMz1;FLV%Ry;!H3jPSoYmYt#AQM6Y
+z9rdkxYZ!WkqE>%M<^v35<B<@z?4+ZJegr*hW;f4B6EIqN10T3ylESZ*4w020IDzI0
+z=Hb3%5#ptB#=Ti+*+$tm7~A{i{!#1Pt>he&3*Hy2Ulr_>x5M<#D6NZE_Nw1a3JdzE
+z*{0Wgn5g?E8-HkwAd}#2sY#SKbt;AKlAWci!vR-V>K2RI>9_ZKuecWEv-6~vr&$ZQ
+zsPIbh^-03-U#G0zcf%rK)nvua(|T3sG5q*oyPI*{9hG;FZq6%s%cXztVrSH|baHM<
+zNy+nbsi;+O%$SfAY$P5en%uggnLT~A2eV?8Ie4o*Zovr!pwEG)qAQ<6D9;)G_>pY2
+zc`K}-;vd#gqV@(6M9F#LYx?$Cqj@Jg-1D6+54cvjk>t=8&lKSR^6)GELD+XPHs5zR
+zc^<C{8JCHH4L5;5p#zx}q!@Qz_jxCX5CGsI&^tju?&>E__%_C1TqEE%2e6W9*J$Fz
+zEg*xFl&wQb`uQe+z!}&$71;)6m7X^1LflkO_T9T5h|gC}9UIB`QLQ1dCD$44OM7+(
+zGJar}n243V`i{Fwnt1tYp%YYUkHm?+)s83;x}Cq~#E6^c+zk)6Xc{N<{`bhx#!>4S
+zb!nIadvceOsEBq)-7+@#r(3??4!?_LpqJu~gNeu;Dbx2rha8$>(;Xa+7=+9vUD&!n
+z*FJ<F!`d?;`U=~&n_|pVBEtNTJJKD^b3`TCtdl(1JWAD7#Ny2d$0VVj!igMR1e3v{
+zg=BMbAh3!ZfT165gkS?#b&dhexBg%XPABYGb`qK%4fXX8jI@TED1>%T-IL)a_>?&j
+z<!CDlw5SwHo$%f|Z9}6R9j`V)_n=-gPDsfw^q*inCZW9A!Hak!Go&}ivXo92U0O34
+zsAAzRXUujvc2V-R1qJjWfx?Jga%<6c0~Z}_oG)(<tRGhC*)D!KUn_JZ=Sy#0zisKA
+z&qMG4^f^C00oCWFn3{i-_j+(gT|o(xFYoXI8V1@WfBZ?SG-v;I21w~@oS=t0g<ZhP
+zNn|>@s=*(7*0xgb6_@R>x2I2ion9%4T;kv8W)_p#T@hkLE!}roo~eXNwo~Hf@X55t
+z@Jw{KfPB!rSt5{0kf_UxR|2h!SP-{_PGQ>DCgr23dIz7fziSXqm-_SP&>=!!p=SCm
+z;(|lC3}b`oA?pzc#gbH4d@n*#`iOb+$k!9eF#z%?JBD#~3P|1yo(s=^qfYInkpZ;%
+zhW%sC`^r$-<6S2;WtC%hph@DXgb^L6noa|H>uqu;bhSckgay;FBbo1JfZE%t^CK|(
+z`Ty#)FfY8drGF7e!bFX8kWOFZi}E)p5Kc~#qs<vn9qE4hzp7IU=WnnYFBt95dvFW?
+zcC)?M+`&J}LnCWlmx*%^8QqbKKq5ZmP8m#Y^T{1obmaU0M?0=sH%q23%47f7a+Q~*
+zl25w5JITB-d!rCe;e>ph3JB4R>_oN|e1b8GstDyAUR?`J4jp)yAo+E!TJfr<B;SM$
+zL7}2Z>r}%8f%mQt>rNaT{x2D!1%Ykg(u13fK-BD!_m><3qfd=IP^Gd-Sr=P@oR*g`
+zh8<c0XeQ9&L5BF$xYMNF`?Y?A4mPA?H^rsq0GUOpobg__c(Dik*ey{&ileU(5BRgC
+zD1P<!G22tyU79pepgfUVt)v476AjS+V|&9~t5#-4SK{j%Qe$kT!b6vq{~R|i4V5pR
+z5%4eT%KP@TO6swK9b!^B1aOIG^RjO~Xe-?O+~t@Y)=?x6Q;w-fWiHkuAK<3w%-^LK
+z4y<_^jP*Peo{BSTTvvY3L7Hiauh%bVkCZAQ+`KBQ<Ru84>A8lN_Tns~q>`F@*0u4$
+zx2SVyeuMSVzM>3IywoWOSPoi{<Ha9<((9GA261-b@y6>XL=lx2ImJC}|LzF^MzXg0
+zC|p%;_k^7E2<bUx3&n+1<`M4fW+t7=Hdj{D{$gQ(bef;z>DxYY=0LNOdflUieEXh^
+zpxL0f4wdel8HAoQe>Z$kFyrAz{lPs0cAgiWNT2nQ?<PZH@g3#cG~suGyN1LS8_?g}
+zcWTWVSidMEUIg99X~jUu_8LG7B2SPBp!tIj(U#IHdONA5ARnSg)EC}3hKOiq4J-R3
+zvj{S#3=*o58>0+NLhA7RnDb|CHTXfVR4iGqiNr%pdH~OUw8RrJF2KW5C^Jxv;vxhE
+z>h+ZO?ninV49k3DRH4Z9`i<s5=`~XXa823qy)XqzPU&ORL(LCP*OGc(j7E9D`W6)!
+zZ;cRIH-0sU`)E>>=;PGv>@pG$oq5ccBmQ>Nv~GLi%eqcHyi8tPLKv~+%fz1G>~%(X
+zn6OwH0Q!)ZpWkr0Iwkk=VM8RR6bxF~G-4aC;uX_;rY*M#_H696x1A=10rZ5H2_FKZ
+z=zHC9h`V@?riKH6y~s<0fQ^u125|ZUi~!qkYyE??TRB;=<i@jnu`YmQXW=q|jJU+I
+zt1g2+{SP3R#oVoTwKLue)pnLsO7soQ`7shZJHyWl{R9K2Jm&%?GS9j)Q0aXDl&u15
+zdcv2#3S?|Mt3_W#kHCNxQ`0{$>ndv1&@fiBl1mLj9JNp9iDdP$omTI5lXY9}E#V(Z
+zxs-E5(XmyKnI}MBeM&906;Vr@)r*L{1D_d+erAbBHsrQ}pe{=G;G>sMi()%DaPaSp
+zinc1@zd|{PS*^NC%7<9KMBb8qa*?xYHP}eyRc(<36V%dC-A0auxcbcp!!g$vkOKQx
+z*TkikrruAid0Rt5w;;ClX5+OSAltbFA82$IE=q~c|5DGh3n(=OXJFvBjg(Rk4F$+B
+zs8$2KZ0$J}LrtZ~)oLCLx3Og?%YJH4eFtqi?Hhj)=Oba;>*^@P;|-)!!~&-J#Jhe8
+z<nvt%3KB;9Eg0!aS!*05sIIFj*$zg=<|2xZ$UWQD;K^TU3}U}dpmLY2&9U`T;7a6~
+z@HZ~M!T~%q*lLxOFO79=pDSx;;4%>Dmp^Zel@uU!FNItR3_mWVQI^qS6Fliao%T*s
+zu+|`p-Jj42JU|Kn4$_D4P3g9-(zJ#2dffFn(*h5Y8l5K5E1R=^6zHhW#bm+EWlwP2
+z9DmEJ6zv<95R_(p;K{u#fK_zb?~MiAtD;y`$PnNur$<ATP<90Qp%zctpbQ`)HI+EL
+zz)o^mSDDQX3`)!9$pOOk@Gm1!%*0rA1zDHrj2B&cf_*yzV4pE=<dkE@QRH@&9D2n4
+zI&}8S6|@(CWDkx8!Qu}qSmWm4xmCK2mj>v?!=(OCF(*qOa)KN}^~B(g36%t0=rSg0
+z*9-eZp?4Ukc25KKZ-1)qeZp;uKV#Z87^iK`ewT?Gq!f$kk=JxOLOOzcl@wf7m5F+W
+zevqPe4DwwmG;H#!#%k-@IaTY(ZsxMVK>=%^UVGytW9xfw#5)$;&Ad4|y?(|>vF)5-
+zEHOmj^8l0$<oe8FIDbO^zH(l#x+r;g6l%pt$_ibn^9Y`;mFMF)Or}Ljbc*wEPi;q-
+zh^pUdH{5vFuAno8w9gP?tThse^2$pBGX9443H4}DTi0#^R5rLD>+Fq>Go^<lp#(~)
+z*UioKOzG4jadZ_=>E^H)!j+#0epVBkF^kl$POfguOU3_&k%e>4g{2;wlXwZA4U{hA
+zMfoTucD%nga4A3>Yy@fxOkJCcAu;}^C~Nat4i`0^!^M%4t)vncC!FTZ$=fOmZ5Pl<
+zxk>&~h2I?-s!*POwb_y#<$6hb`khcGqeA%8eD-GKexiq<+)j9G*;Rw2T3qZ)gRTbm
+zmH=<6cD8hEG!NXpOOMzU!<eJv2HnOev1P#V6*g}sh{5p`-|LE;oz|U}LRBQ9oTMFp
+zKVm$4-sEav9;?J!)E5dE_in1oT9ewgka_XDF_mHUwG%+2PwcbbbMf<=h+77Y*(>7g
+zHbuHHL#XW?RZ(@8=K86}@yBD7Op_IDCtaV^E8lBDr9Cz%JwCPzA~W|xa`gFBZhort
+z#F%Ls0UG63RACn^C<fg}ZF*0j@%GphF7*OwVeB2We7yYXpLFh3cUUq;LOIXbocXrv
+zh76n<9}^0{<BC1<O#39iXT2p5DlAYAe{Yif?$<<4W3BqkcZR+BIo&8H4-)8D{t#Pb
+z-S?`4hL-XjaXe9l*89sdfF(!!O!YdksNnxX3Kol}DFi;~25Sl`t!NyXBi)grK2Z8^
+zN-_j%BmRL7SN`PhP&`7U+alahFa`q4%#pllK_=6p2J|sS#iA#sPa6U+68m2N#*-k;
+zX~%|)Nkp1%vLP|eAi5mT9gmX<!;1I}CM8xP65+|^7O-Kjq3nYoAE3H(IMD<*r7?{>
+zE?R1w1El(<v+<z%I|vA%RHhIOCSG!p%-D_Ny6dw+hK`8!84C?S&km*4@XQ%u9D|vJ
+zG-|Tyzc{RhOGQ!E_umVd61A(A5LWdFpeFiwx4(50C+q)0adNszf3hw>{Lv$>-sq4(
+zuFvQ_H{U@R0%PNV3aphm7R<gAi5afcpnnlihsrRuSe2|MW$u7^9!sh~RSj3~YZ{&X
+z`48sj0m8CTFMJy*t~+EGFg~`lJ2~apCW)BMOVRPA!=oGko6iRiLzW#BBMW7r!3vyC
+z%O-N8_nU3k^YnGDk(~dZ-{fs^7_v7c=4F}xXM8KdSUfpOH%|-w&~5I$(6CcFJF%fO
+zLS1wIEdB0XJS+honLrv)H>eX!!~5rHyl}&*H>RbSJYRJx*V}C|ulhZF=momD5KcnA
+zi%}X;TmHa0*_0wpoc^o=Sfvz8W!Jime?JvUk@)0pvC5X*)FEZ@GO}Qg4w{ugAjZ#T
+zwrCZa7<;_dtk2a7>F7Qq*_9K6A>N;JRTd*T%f&-nVliZhm{RJZXS;h>#loo35bgNs
+z*q*v)?i=Rb=xN*(WS>dgv=j@|m6gI%mr<jp3p2$y9szS6owgw06%tvaJf@qh##9PX
+zr?t~@lzJAEb;e6~`<B%s{Mp32S+}<A={83);g1Krp{HoD(nEt|KX+Cu)eA7UfsEM}
+z>vHQ4RKIS+kw5?385_jqH|bM#sxu^J<|qI)3oN<B3DTUm=bVzEXU~v#U_hGOKKT6G
+zi=}%U#jC@>MxJ=a1Eg*ksc9Kk&f7Twd}b!~j>wPhkB*nj2@2E2ZvOaVS#I<v6*ue#
+zWM)Nv9)ixnXZD8R(#h`=<u0PNl*=JpdJUh-$JY?KLj_Lr#DmRv62c*8WGXVfn4~1e
+z+TD+bjyRH7iO%+kS$M2(3+z7mEaO_rIaNdch!le;;P^KcJ_EMC%aP%MObd%~z5oD*
+zscnE2yoa7nBk|Q1i<cVF7G3<a#Iww4=aVWn(VdKQd2E0@uWcArTX(vQvo8e-DomVN
+z<j<e5@VB2*VmfiPab!qI#(TH-G1DXh!}}Z4d>Xugn;?bcHowFbGnGh5;E{Oz$ll<^
+zu^|lA5sY~AsE=@<g!NodeO?1c>Y4%h9)X+KC4!U!QgE`|`b_Mx-_fr|lTxFmX;%C2
+zPJGiykK;}}Z1}^+B^Tc|VzJwlroZa$;aZH3AOwldVH|;T8_N@e1>Hm&u>Z_VNRt;=
+z{nvl!l&b$~?9gZAprgt?27&vG^!CLXwU_?ZS1U+kxDwP1$hxZvPRk9ho7`$+w8xNw
+znxI~j5V&oRL2`Tc88bEXmIzV1S6Qe@aqj+_eJRt_b-3pB#9zFZ)vG-tOTue*;o~7{
+zM8G|<RtmYszm0<T*^cL%P5A(x5T2Uoc-sZVNE8rrrFlO75iP2vrB;rsh+}RKOfOo{
+zcunX~Vsa#-PaWb_tiQY5_THV!^d_?P7#5X(Vm!6{=$n&{hwKIHS6$IwaPBf5W^*w!
+z$VBzMMr=@lYbKdS=R7YkaRcLAwKvZR89f9nGuZNSo8Tded8b9H#=;1wiav@SQ9r%N
+z^<^>{$&$c4OgSDGyY>>JjoY7%CGUyOj805`vj&oj93i)`EH=&F^Ge%D(8C1_J44Hp
+zvB*b-KDA(y!IV`#4>Zsc0>{SWDZMpAktLL+xzPsruH^iRkmeC)?XM<inh-2aXGzPw
+z)9a)pU>VhT<MDp7(ApiJ1nNsVjm-JcQ)XL}rlV0!ZdoQX7cpg~X7+Q$(_H#~FijI;
+z(CDwt+TcxNpq6_1x6HF7p(?S14;7!A-{DN6{OHtODji??VObHOH$7;3Unwvq!3=x}
+z0gR+MyG=|GwlCZR<JcBVPsr#JbxfOEpWtQA#D>FeAIae)k!OzmTfK>2y8`n6UT|Pv
+zZgU2#Uc+Ga7^PMzR<_K)g$=WKgvUPY<L-G!>k;t{=oot^fPtb0Yz&csvP;9nwNK2m
+z)XgS&zHR4pS?y)Cf#Nn2K1Z>uF0S$q3TpXaw(m={-uAH^TQ}%HJD5UD$H%33X-tds
+zaAe{l1M%XJMJgpV57kH~+KD=jUD1x<&70iXljnXbL4+H&-F6k#>K@t)HZCGRjIzH~
+zAZ{Nh9xk9wyG4sAuFu;7J#BKd7M+Vx;R<2a{gCl>fa#rb_518{M9v#uUBew>ftRhU
+zS^}r4>p-b3S{?5-)S21Qy-!W}A<xZYOF-;!u-1BDHmJk&Umlo@cJof1`~H3H?k71z
+zD_TnksL_9SuQAgjENA$Nz}%k@ePd*wc1M#F0$i-Rc`NOb`jPY#;B{_cE!=^mzq-6d
+zV4X;PTl9zSC>uStEIzx1_)Of2^k!Ky=j-H&HH>(FUP8bJi;<`iNu{5_y)vxgdd^E-
+zxOg@inaLMY-z^+-I2@hd3qY3mNXI<sXGoBKK|QGe98-Q@v{!|6z6-P37fDs$GIHLJ
+zYU29x%WAaLqt3thg6WJqb(t9ys@~z}66BT-6csBqjx0Q$;DyS$BI$&4mr?yUffWzv
+z*o3IFvJ{%Yn^%_78k!s6ML#q14l3DLDZEa=l;&2^%F=a&)*@dM-<&6`KT<JFfX}pH
+z@6K5GA-%b>DcE`=JA|8Qdlb3BAaU!b_+5#423a$)Bm!WSQtLAvPOxf+sKavMh5waW
+zV>ykI&$RHl(p^2d#1kt_Y_SuDW$&4z6EKCEm*l;CL!I4WxO|MzJB&i<1zTX%CGEtp
+zLH=4#j?UR6R4~Uwu^%D>K<&hQw<1^e7BM--H`;%GKa&0Nm~k-#eap~171!9e-o-h@
+zhX(VAvXV;{pOcZ`eMA1tVHTb>Pz3Md&$nY#+)-?y!Cu3}nR#*Yd#$ug{F>BacJt{r
+z{fd0~)%T)rY-v5@&MLS4&5eDTKZI9Q*<_$`=vtk&*IoVQ2kGg;<5&wK#lWA_e-zft
+zR42IF_D9g=_nbzjbZvZ&o*?=Esc3n%O`qBgkRenazKxtHx_NC)vgEF#k$$WfTwr;o
+zw*b<22vQccIxuRp#ryj(92^vy?2)Anq})oEe+X|dMCABESzstg@}2-|jXAU-*nuAb
+zkqF{wos>9`P(Q%Fo8D`_yCAeog2Ir0RZEJdJ}5GGFyH3@qPq703(+APO2gH23bZ!8
+zK15(p3$(xd1@F~5LgnCQRFnLsZ8{TVn|!t0QeVMw2c?kbZnZaDfekC#u<!vSAaWe=
+zgpR}PzMlNL*<-y<FuEaH#j9QJ0DdJ+hE@lt#aK*bA`{J;z}J#J-$l`mJh_v@9K=?B
+z@^xoOuKj>AKK^GQ03q860n)62nNv2+Uz_%Aehv}p=G+50*pVtex=Jsj^uAs#;3;Io
+zhqg1U5Shu3a15{1Rp7&b>l<z}oG_H8+E_+LW6_-ZA~ipz#s=dyBYl^?nEzX^Y?>7+
+zF7oggqZaRHDA<ls>REX?4swe~$lGu4r+#2akK$ncEEM`A^mU-@(1c_c07QV>oQ4J#
+z{ASZrSMoeT0K9e@%T*t3XJfh%T0cWKU2(~2`6(qLIjsIyGMb?UsGS97*XlNmW9vAL
+zNY(!9w%&J&dn&d*r;o5rF!&ghnha!;XdbPy-ocWfT-22?kAamCI8>1_$aZ$WoR@2c
+z(X#J(K+1K02jk^6bxuQ)VtKPzCS2bHL)eLhy$r5U*JTHaq6$TTxNYHin};lrACAM5
+zvQ6`%;TwccIX<ddM`PrrI*T+o0*=03?4Hfn+BXB+VC8$Gdqfkl-99H`;eP^xBT5s4
+zq7eKD)S&@vGV1U5e@_e#z!9TfI={kd7$|FWzM3Q4Z*c|C9XElZtLlizTjfI*7tgfh
+zO9s#_FfuGrUxc0J!@G~Q;D=CYJ<@$bge9W!CK}mPSBMzVM_4|(T^h<(4!pe+1B?D2
+zyMpBz)tukDpY<C9Gv`;$%$3JTz%j3$nx6ChT7oH;heDVv(ik~*<0*J*@lJED?ijtI
+zJepYO7A;ESB8ekbvfw@l!5dF#e#8&Gn)@ML%NC>q)5DwdHG+~mdkp;gkE0L`iHSj@
+z-R-|5bP#bzpWBE1!-aOo!;^aR`*?%b4(hs5P1O{0TpdGNIN3QHQ4!O;yt`H4x6=Y6
+zS>FNr+;qHC;W`)IO0Ph~yNX=~h-JwPZHii42!qms!qlvgXHbX!Vd+3g{ha&FJ63?}
+z&6eR{v*uU1m1W9SV?pdKr@}cO&#e8|t6YrIN|2oif6lpEIT?6o|LnRY=v6oJGzVA@
+zg?<}TOufG!y0CvSo20JbI)p)c%_gl8!nfJA{$qX*sZ0BuJQ*Kn<~3Q%{nnGi<hYNv
+zQ2M4!bx-gX_LK1Y8a$GPs6e;XR;^yOw7Zky)&)RSce`VKbOb4q0A?Nt9B1m=q^dIG
+zJ+6ml_pgd%Z+Z(nLo6-v;yt1=)>+(*4c9nA@a^~zsinZBd~Hq$*vfPf`fpPR8w?j1
+z%-K=Vz3I{<l$960Y17p{=ITtz(a5sabiaVZYHd0XIU%{IyuV@<<*YI|-1wUx6-;4>
+zE9Y%n7_p+wWXhrqLlh?NQ*hX-?Srq6NOyG&{e|<tYn(I0Vz1m4Iecs~aLl(=34EHx
+u?=^nFmip|m3>{5wEUy1?3!>AB3(zSHV4e9a=$sQ>I1zvvS17xDVso}Q(${SO
+
+diff --git a/assets/ssrm_default.xml b/assets/ssrm_default.xml
+new file mode 100644
+index 0000000..84941c4
+--- /dev/null
++++ b/assets/ssrm_default.xml
+@@ -0,0 +1,235 @@
++<?xml version="1.0" encoding="UTF-8"?>
++
++<!DOCTYPE siop_document [
++<!ELEMENT siop_document (temperatures, levels, components, scenarios?)>
++<!ELEMENT temperatures (temp+)>
++<!ELEMENT temp EMPTY>
++<!ATTLIST temp
++          type (AP|BAT|USB|CHG|PA|WIFI) #REQUIRED
++          default CDATA "1"
++          min CDATA "1"
++          max CDATA "1"
++          step CDATA "1"
++          init CDATA "5"
++          hold CDATA "1"
++          gap CDATA "0">
++<!ELEMENT levels (level+)>
++<!ELEMENT level EMPTY>
++<!ATTLIST level
++          id CDATA #REQUIRED
++          temp CDATA #REQUIRED>
++<!ELEMENT components (component+)>
++<!ELEMENT component (limiter+)>
++<!ATTLIST component
++          name CDATA #REQUIRED
++          tempType CDATA #REQUIRED>
++<!ELEMENT scenarios (scenario*, scenario_group*)>
++<!ELEMENT scenario (limiter+)>
++<!-- you can use below delimiter on scenario name -->
++<!-- "!" : intent, ":" : package, "," : plural    -->
++<!ATTLIST scenario
++          name CDATA #REQUIRED
++          tempType CDATA #REQUIRED
++          priority CDATA "0">
++<!ELEMENT scenario_group (scenario+)>
++<!ELEMENT scenario EMPTY>
++<!ATTLIST scenario
++          name CDATA #REQUIRED
++          limiter CDATA #REQUIRED
++          step CDATA "-1"
++          delay CDATA "0"
++          cond (sensor_check|for_request|for_temporary) #IMPLIED
++          temp CDATA "370"
++          gap CDATA "20"
++          value CDATA #REQUIRED>
++<!ELEMENT limiter EMPTY>
++<!ATTLIST limiter
++          name CDATA #REQUIRED
++          step CDATA "-1"
++          delay CDATA "0"
++          cond (sensor_check|for_request|for_temporary) #IMPLIED
++          temp CDATA "370"
++          gap CDATA "20"
++          value CDATA #REQUIRED>
++]>
++
++<siop_document>
++
++    <overheatcontrol>
++        <complex>
++        </complex>
++    </overheatcontrol>
++    <modelsettings>
++        <temperatures>
++            <temp type="AP"   default="15" min="15" max="15" step="0" gap="100" />
++            <temp type="BAT"  default="1"  min="1"  max="1"  step="0" gap="0" />
++            <temp type="USB"  default="1"  min="1"  max="1"  step="0" gap="0" />
++            <temp type="CHG"  default="1"  min="1"  max="1"  step="0" gap="0" />
++            <temp type="PA"   default="1"  min="1"  max="1"  step="0" gap="0" />
++            <temp type="WIFI" default="1"  min="1"  max="1"  step="0" gap="0" />
++        </temperatures>
++        <levels tempType="SKIN" >
++            <level id="-3" temp="300" />
++            <level id="-2" temp="320" />
++            <level id="-1" temp="340" />
++            <level id="0"  temp="360" />
++            <level id="1"  temp="380" />
++            <level id="2"  temp="400" />
++            <level id="3"  temp="420" />
++            <level id="4"  temp="440" />
++            <level id="5"  temp="460" />
++            <level id="6"  temp="480" />
++            <level id="7"  temp="500" />
++            <level id="8"  temp="520" />
++        </levels>
++    </modelsettings>
++
++    <components>
++
++        <component name="AP" tempType="SKIN" >
++            <limiter name="CPUFreqMax" step="1" temp="380"             value="-1"                   />
++            <limiter name="GPUFreqMax" step="1" temp="380"             value="-1"                   />
++            <limiter name="AppInstallDelay"     temp="400:420"         value="-1:10000"             />
++            <limiter name="DexOptCpuset"        temp="360"             value="-1:1"                 />
++            <limiter name="BackgroundCpuset"    temp="360"             value="-1:100:200:300"       />
++            <limiter name="TABoost"             temp="400"             value="-1:1"                 />
++        </component>
++
++        <component name="CAM" tempType="SKIN" >
++            <limiter name="CameraAr"            temp="400:420:450:480"             value="-1:1:2:3"       />
++            <limiter name="CameraOverheatLevel" temp="350:370:390:410:430:450:460" value="-1:1:2:3:4:5:6" />
++            <limiter name="DualRecording"       temp="350"                         value="-1:1"           />
++        </component>
++
++        <component name="CHG" tempType="SKIN">
++            <limiter name="Charging" temp="380" value="-1" />
++        </component>
++
++        <component name="CP" tempType="SKIN">
++            <limiter name="CpLowMode" value="-1" />
++        </component>
++
++        <component name="DISPLAY" tempType="SKIN">
++            <limiter name="Brightness"     temp="380"         value="-1"                     />
++            <limiter name="LimitHrr"       temp="530"         value="-1:1"                   />
++            <limiter name="AppCastDisable" temp="450:470:500" value="-1:1:1" delay="0:300:0" />
++            <limiter name="MultiWindow"    temp="450:470:500" value="-1:1:1" delay="0:300:0" />
++        </component>
++
++        <component name="WIFI" tempType="SKIN">
++            <limiter name="WifiTput"    tempType="SKIN" temp="450" p="50" i="2" d="50" unit="0.1" min="300" />
++            <limiter name="WifiP2pTput" tempType="SKIN" temp="450" p="50" i="2" d="50" unit="0.1" min="300"/>
++            <limiter name="WifiAwareTput" tempType="SKIN" temp="450" p="50" i="2" d="50" unit="0.1" min="300"/>
++            <limiter name="HotspotTput" tempType="SKIN" temp="450" p="50" i="2" d="50" unit="0.1" min="300"/>
++            <limiter name="SmartBonding"                temp="400" value="-1:1"                            />
++        </component>
++
++        <component name="CHG+DISPLAY" tempType="SKIN">
++            <limiter name="Charging" temp="360" value="-1:80" />
++        </component>
++
++    </components>
++
++    <scenarios>
++        <scenario name="ScreenOff" tempType="SKIN" priority="1" >
++            <limiter name="Charging" value="100" />
++        </scenario>
++
++        <scenario name="TPBoost:com.FTATS,com.fafa" tempType="SKIN" >
++            <limiter name="CPUFreqMax" value="-1" />
++        </scenario>
++
++        <scenario name="SIPStart" tempType="SKIN" priority="1" >
++            <limiter name="CPUFreqMax" cond="for_temporary" value="-1" />
++            <limiter name="GPUFreqMax" cond="for_temporary" value="-1" />
++        </scenario>
++
++        <scenario name="AppStart" tempType="SKIN" priority="1" >
++            <limiter name="CPUFreqMax" cond="for_temporary" value="-1" />
++            <limiter name="GPUFreqMax" cond="for_temporary" value="-1" />
++        </scenario>
++
++        <scenario name="Badge" tempType="SKIN" priority="1" >
++            <limiter name="CPUFreqMax" cond="for_temporary" value="-1" />
++            <limiter name="GPUFreqMax" cond="for_temporary" value="-1" />
++        </scenario>
++
++        <scenario name="CallStart" tempType="SKIN" priority="1" >
++            <limiter name="CPUFreqMax" cond="for_temporary" value="-1" />
++            <limiter name="GPUFreqMax" cond="for_temporary" value="-1" />
++        </scenario>
++
++        <scenario name="WakeUp" tempType="SKIN" priority="1" >
++            <limiter name="CPUFreqMax" cond="for_temporary" value="-1" />
++            <limiter name="GPUFreqMax" cond="for_temporary" value="-1" />
++        </scenario>
++
++        <scenario name="MultiWindow" tempType="SKIN" priority="2" >
++            <limiter name="LimitHrr"            temp="430"     value="-1:1" />
++        </scenario>
++
++        <scenario name="Navigation" tempType="SKIN" priority="1" >
++            <limiter name="CameraFps"       temp="360:380:420:450" value="-1:24:24:15" />
++        </scenario>
++
++        <scenario name="Dex" tempType="SKIN" priority="2" >
++            <limiter name="LimitHrr"        temp="430" value="-1:1" />
++            <limiter name="DynamicFpsLevel" temp="430" value="-1:30"/>
++        </scenario>
++
++        <scenario name="LowTemp" tempType="BAT" priority="3" >
++            <limiter name="CPUFreqMax" value="-1" />
++            <limiter name="Charging"   value="-1" />
++        </scenario>
++
++        <scenario name="SmartSwitchTransfer" tempType="SKIN" priority="2" >
++            <limiter name="Charging"                    temp="300"                     value="-1:70"       />
++            <limiter name="JobRestriction"              temp="340"                     value="1"           />
++            <limiter name="WifiTput"                    temp="380" p="50" i="2" d="50" unit="0.1" min="400"/>
++            <limiter name="WifiP2pTput"                 temp="380" p="50" i="2" d="50" unit="0.1" min="400"/>
++        </scenario>
++
++        <scenario name="SmartSwitchAppInstall" tempType="SKIN" priority="1" >
++            <limiter name="Charging"         temp="300"                      value="-1:70" />
++            <limiter name="JobRestriction"   temp="340"                      value="1" />
++        </scenario>
++
++        <scenario name="retailmode:com.samsung.rms.retailagent.global" tempType="SKIN" priority="1">
++            <limiter name="Charging" value="70" />
++        </scenario>
++
++        <scenario name="scrrensaver:com.samsung.android.retail.screensaver" tempType="SKIN" priority="1">
++            <limiter name="Charging" value="70" />
++        </scenario>
++
++        <scenario name="SPA" tempType="SKIN" priority="3" >
++            <limiter name="CPUFreqMax" cond="for_temporary" value="-1" />
++            <limiter name="GPUFreqMax" cond="for_temporary" value="-1" />
++            <limiter name="OverLimit"                       value="-1" />
++        </scenario>
++
++        <scenario name="GameSDK" tempType="SKIN" priority="1" >
++            <limiter name="CPUFreqMax" cond="for_temporary" value="-1" />
++            <limiter name="GPUFreqMax" cond="for_temporary" value="-1" />
++            <limiter name="OverLimit"  value="-1" />
++        </scenario>
++
++        <scenario name="SpeedControlForTG" tempType="SKIN" priority="1" >
++            <limiter name="OverLimit"          value="-1"/>
++        </scenario>
++
++        <scenario name="BrightnessControlForTG" tempType="SKIN" priority="1" >
++            <limiter name="Brightness"  temp="340:360:380:400:420:450:470:530:550:600" value="-1:230:210:180:150:120:100:100:70:15" />
++        </scenario>
++
++        <scenario name="HrrControlForTG" tempType="SKIN" priority="1" >
++            <limiter name="LimitHrr" temp="380" value="-1:1" />
++        </scenario>
++
++        <scenario name="LrrControlForTG" tempType="SKIN" priority="1" >
++            <limiter name="LimitHrr" temp="380" value="1" />
++        </scenario>
++
++    </scenarios>
++
++</siop_document>
+\ No newline at end of file
+diff --git a/smali/c4/c.smali b/smali/c4/c.smali
+index 2491f98..029b5c3 100644
+--- a/smali/c4/c.smali
++++ b/smali/c4/c.smali
+@@ -164,7 +164,7 @@
+     sput-object v1, Lc4/c;->b:Ljava/lang/String;
+ 
+     :cond_1
+-    const-string v1, "dvfs_policy_s5e8825_xx"
++    const-string v1, "dvfs_policy_s5e3830_xx"
+ 
+     sput-object v1, Lc4/c;->c:Ljava/lang/String;
+ 
+diff --git a/smali/k4/e.smali b/smali/k4/e.smali
+index 509fad0..a798d06 100644
+--- a/smali/k4/e.smali
++++ b/smali/k4/e.smali
+@@ -95,7 +95,7 @@
+ 
+     iput-object p1, p0, Lk4/e;->b:Ljava/lang/String;
+ 
+-    const-string p1, "dvfs_policy_s5e8825_xx"
++    const-string p1, "dvfs_policy_s5e3830_xx"
+ 
+     iput-object p1, p0, Lk4/e;->c:Ljava/lang/String;
+ 
+diff --git a/smali/n5/i0.smali b/smali/n5/i0.smali
+index 7a437c3..b633db9 100644
+--- a/smali/n5/i0.smali
++++ b/smali/n5/i0.smali
+@@ -818,7 +818,7 @@
+ 
+     if-eqz v5, :cond_3
+ 
+-    const-string v5, "siop_a16x_s5e8535"
++    const-string v5, "siop_a14_exynos850"
+ 
+     sput-object v5, Ln5/i0;->c:Ljava/lang/String;
+ 

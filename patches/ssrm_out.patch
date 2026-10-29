@@ -1,0 +1,22 @@
+diff --git a/smali/com/android/server/ssrm/Feature.smali b/smali/com/android/server/ssrm/Feature.smali
+index 75935df..c706c7f 100644
+--- a/smali/com/android/server/ssrm/Feature.smali
++++ b/smali/com/android/server/ssrm/Feature.smali
+@@ -342,7 +342,7 @@
+ 
+     if-eqz v4, :cond_0
+ 
+-    const-string v4, "siop_a16x_s5e8535"
++    const-string v4, "siop_a14_exynos850"
+ 
+     sput-object v4, Lcom/android/server/ssrm/Feature;->SSRM_FILENAME:Ljava/lang/String;
+ 
+@@ -357,7 +357,7 @@
+ 
+     sput-boolean v0, Lcom/android/server/ssrm/Feature;->DISABLE_HEAVYUSER:Z
+ 
+-    const-string v5, "dvfs_policy_s5e8825_xx"
++    const-string v5, "dvfs_policy_s5e3830_xx"
+ 
+     sput-object v5, Lcom/android/server/ssrm/Feature;->DVFS_FILENAME:Ljava/lang/String;
+ 

@@ -1,0 +1,14 @@
+.DS_Store
+apktool.jar
+apktool_frameworks/
+apks/
+src/
+work/
+out/
+unpacked/
+dist/
+build.log
+platform.pk8
+platform.x509.pem
+ref/
+__pycache__/

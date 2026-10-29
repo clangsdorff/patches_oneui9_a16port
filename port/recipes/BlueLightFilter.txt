@@ -1,0 +1,2 @@
+# Eye comfort shield without mDNIe: drive the SystemUI overlay instead
+body	d/a	b(Landroid/content/Context;ZI)V	BlueLightFilter/set_filter.smali

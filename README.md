@@ -52,7 +52,8 @@ sign the APKs with the same key.
   bypass (Secure Folder, attestation).
 - **ssrm.jar / SamsungDeviceHealthManagerService.apk / SohService.apk** – DVFS,
   SIOP and battery tables retargeted to s5e3830 (Exynos 850).
-- **SystemUI.apk** – software Eye comfort shield, power-off lock, quick panel tiles.
+- **SystemUI.apk / BlueLightFilter.apk** – software Eye comfort shield, power-off lock,
+  quick panel tiles.
 - **SecSettings.apk / SecSettingsIntelligence.apk** – Outdoor mode, Eye comfort
   shield slider, Motion smoothness hidden, deknox settings entries.
 - **DAAgent.apk** – Dual Messenger for all apps.

@@ -60,6 +60,7 @@ SamsungDeviceHealthManagerService.apk
 SecSettings.apk
 SecSettingsIntelligence.apk
 SystemUI.apk
+BlueLightFilter.apk
 DeviceDiagnostics.apk
 ManagedProvisioning.apk
 KnoxCore.apk

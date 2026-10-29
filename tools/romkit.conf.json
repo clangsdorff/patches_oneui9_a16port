@@ -46,8 +46,6 @@
     "vendor_boot.img",
     "vbmeta.img",
     "up_param.bin",
-    "prism.img",
-    "optics.img",
     "odm.new.dat",
     "odm.transfer.list",
     "odm.patch.dat",

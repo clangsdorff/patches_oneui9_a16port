@@ -55,10 +55,6 @@ show_progress(0.100000, 0);
 block_image_update(map_partition("system_dlkm"), package_extract_file("system_dlkm.transfer.list"), "system_dlkm.new.dat", "system_dlkm.patch.dat") ||
   abort("E2001: Failed to update system_dlkm image.");
 
-ui_print("Installing optics & prism image...");
-package_extract_file("prism.img", "/dev/block/bootdevice/by-name/prism");
-package_extract_file("optics.img", "/dev/block/bootdevice/by-name/optics");
-
 ui_print("Installing kernel...");
 package_extract_file("vendor_boot.img", "/dev/block/bootdevice/by-name/vendor_boot");
 package_extract_file("boot.img", "/dev/block/bootdevice/by-name/boot");
